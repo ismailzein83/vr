@@ -10,6 +10,8 @@ namespace BPMExtended.Main.SOMAPI
     public class UpdateContractAddressRequestInput
     {
         public CommonInputArgument CommonInputArgument { get; set; }
+        public CustomerType CustomerType { get; set; }
+        public ContractInfoDetails ContractInfo { get; set; }
         public string  City { get; set; }
         public string CountryId { get; set; }
         public string StateProvince{ get; set; }

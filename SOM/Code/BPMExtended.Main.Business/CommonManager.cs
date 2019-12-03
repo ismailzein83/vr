@@ -739,6 +739,62 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public CustomerType GetCustomerType(string requestId)
+        {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFilter;
+            string segmentId;
+
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StRequestHeader");
+            esq.AddColumn("Id");
+            esq.AddColumn("StRequestId");
+            esq.AddColumn("StContact");
+            esq.AddColumn("StContact.Id");
+            esq.AddColumn("StAccount");
+            esq.AddColumn("StAccount.Id");
+
+            esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StRequestId", requestId);
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            if (entities.Count > 0)
+            {
+                var contactId = entities[0].GetColumnValue("StContactId");
+                var accountId = entities[0].GetColumnValue("StAccountId");
+
+
+                if (contactId != null)
+                {
+                    return CustomerType.Residential;
+                }
+                else
+                {
+
+                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Account");
+                    esq.AddColumn("Id");
+                    esq.AddColumn("StRequestId");
+                    esq.AddColumn("StSegment");
+                    esq.AddColumn("StSegment.Id");
+
+                    esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", accountId.ToString());
+
+                    esq.Filters.Add(esqFilter);
+
+                    var entities2 = esq.GetEntityCollection(BPM_UserConnection);
+                    if (entities2.Count > 0)
+                    {
+                        segmentId = entities2[0].GetColumnValue("StSegmentId").ToString();
+
+                        if (segmentId.ToUpper() == "1618FF2C-3985-4FD3-8D53-C33B4360AC0F") return CustomerType.Official;
+                        if (segmentId.ToUpper() == "FB0EFE66-CA84-4AD2-A8C5-7781BFB5410A") return CustomerType.Enterprise;
+
+                    }
+                }
+
+            }
+
+            return CustomerType.None;
+        }
 
 
         public List<string> GetOperationsFromRequestHeader(string requestType, string statusId)

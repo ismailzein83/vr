@@ -52,6 +52,7 @@ namespace BPMExtended.Main.Business
 
             esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StUpdateContractAddress");
             esq.AddColumn("StContractID");
+            esq.AddColumn("StName");
             esq.AddColumn("StCustomerId");
             esq.AddColumn("StDirectoryStatus");
             esq.AddColumn("StStreet");
@@ -77,12 +78,24 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StGivenName");
             esq.AddColumn("StLanguage");
             esq.AddColumn("StLanguage.Id");
-            esq.AddColumn("StCareer");
-            esq.AddColumn("StCareer.Id");
+            esq.AddColumn("StCustomerCareer");
+            esq.AddColumn("StCustomerCareer.Id");
             esq.AddColumn("StHomePhone");
             esq.AddColumn("StMobilePhone");
-            esq.AddColumn("StFaxPhone");
+            esq.AddColumn("StFaxNumber");
             esq.AddColumn("StMailBox");
+
+            esq.AddColumn("StFirstName");
+            esq.AddColumn("StLastName");
+            esq.AddColumn("StMinistryName");
+            esq.AddColumn("StEndCustomerName");
+            esq.AddColumn("StCompanyName");
+            esq.AddColumn("StBranch");
+            esq.AddColumn("StBusinessPhone");
+            esq.AddColumn("StMiddleName");
+            esq.AddColumn("StWholeSale");
+            esq.AddColumn("StBusinessTypeLookup");
+            esq.AddColumn("StBusinessTypeLookup.Id");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -110,11 +123,23 @@ namespace BPMExtended.Main.Business
 
                 var homePhone = entities[0].GetColumnValue("StHomePhone");
                 var mobilePhone = entities[0].GetColumnValue("StMobilePhone");
-                var faxPhone = entities[0].GetColumnValue("StFaxPhone");
+                var faxPhone = entities[0].GetColumnValue("StFaxNumber");
                 var givenName = entities[0].GetColumnValue("StGivenName");
                 var mailBox = entities[0].GetColumnValue("StMailBox");
                 var languageId = entities[0].GetColumnValue("StLanguageId");
-                var career = entities[0].GetColumnValue("StCareerName");
+                var career = entities[0].GetColumnValue("StCustomerCareerName");
+
+                var firstName = entities[0].GetColumnValue("StFirstName");
+                var lastName = entities[0].GetColumnValue("StLastName");
+                var ministryName = entities[0].GetColumnValue("StMinistryName");
+                var endCustomerName = entities[0].GetColumnValue("StEndCustomerName");
+                var companyName = entities[0].GetColumnValue("StCompanyName");
+                var branch = entities[0].GetColumnValue("StBranch");
+                var businessPhone = entities[0].GetColumnValue("StBusinessPhone");
+                var middleName = entities[0].GetColumnValue("StMiddleName");
+                var wholeSale = entities[0].GetColumnValue("StWholeSale");
+                var businessType = entities[0].GetColumnValue("StBusinessTypeLookupName");
+                var name = entities[0].GetColumnValue("StName");
 
 
                 if (status.ToString() == "1") action = DirectoryInquiry.Add;
@@ -125,25 +150,40 @@ namespace BPMExtended.Main.Business
 
                     InputArguments = new UpdateContractAddressRequestInput
                     {
-                        AddressSequence = addressSeq.ToString(),
-                        City = city.ToString(),
-                        CountryId = "206",
-                        Building = buildingNumber.ToString(),
-                        Floor = floor.ToString(),
-                        StateProvince = province.ToString(),
-                        Region = area.ToString(),
-                        Town = town.ToString(),
-                        ServiceId = serviceId.ToString(),
-                        LocationType = locationType.ToString(),
-                        Street = street.ToString(),
+                        ContractInfo = new ContractInfoDetails
+                        {
+                            Sequence = long.Parse(addressSeq.ToString()),
+                            City = city!=null?city.ToString() : null,
+                            CountryId = "206",
+                            Building = buildingNumber!=null?buildingNumber.ToString():null,
+                            Floor = floor!=null? floor.ToString() : null,
+                            StateProvince = province!=null?province.ToString() : null,
+                            Region = area!=null?area.ToString() : null,
+                            Town = town!=null?town.ToString() : null,
+                            Street = street!=null?street.ToString() : null,                         
+                            Mailbox = mailBox!=null?mailBox.ToString() : null,
+                            Career = career!=null?career.ToString() : null,
+                            GivenName = givenName!=null?givenName.ToString() : null,
+                            HomePhone = homePhone!=null?homePhone.ToString() : null,
+                            MobilePhone = mobilePhone!=null?mobilePhone.ToString() : null,
+                            FaxNumber = faxPhone!=null?faxPhone.ToString() : null,
+                            Language = languageId!=null?new CRMCustomerManager().GetCustomerLanguage(languageId.ToString()) : null,
+                            FirstName = firstName!=null?firstName.ToString() : null,
+                            MiddleName = middleName!=null?middleName.ToString() : null,
+                            LastName = lastName!=null?lastName.ToString() : null,
+                            MinistryName= ministryName!=null?ministryName.ToString() : null,
+                            Name= name!=null?name.ToString() : null,
+                            EndCustomerName= endCustomerName!=null?endCustomerName.ToString() : null,
+                            BusinessType= businessType!=null?businessType.ToString() : null,
+                            BusinessPhone= businessPhone!=null?businessPhone.ToString() : null,
+                            WholeSale= wholeSale!=null?wholeSale.ToString() : null,
+                            CompanyName= companyName!=null?companyName.ToString() : null,
+                            Branch= branch!=null?branch.ToString() : null,
+
+                        },
+                        CustomerType = new CommonManager().GetCustomerType(requestId.ToString()),
                         Action = action,
-                        Mailbox = mailBox.ToString(),
-                        Career = career.ToString(),
-                        GivenName = givenName.ToString(),
-                        HomePhone = homePhone.ToString(),
-                        MobilePhone = mobilePhone.ToString(),
-                        FaxNumber = faxPhone.ToString(),
-                        Language = new CRMCustomerManager().GetCustomerLanguage(languageId.ToString()),
+                        ServiceId = serviceId.ToString(),
                         PaymentData = new PaymentData()
                         {
                             Fees = JsonConvert.DeserializeObject<List<SaleService>>(fees.ToString()),
@@ -162,7 +202,7 @@ namespace BPMExtended.Main.Business
                 //call api
                 using (var client = new SOMClient())
                 {
-                    output = client.Post<SOMRequestInput<UpdateContractAddressRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/ST_Billing_UpdateContractAddressAndAddToPublicDirectory/StartProcess", somRequestInput);
+                    output = client.Post<SOMRequestInput<UpdateContractAddressRequestInput>, SOMRequestOutput>("api/DynamicBusinessProcess_BP/UpdateContractInfo/StartProcess", somRequestInput);
                 }
 
                 var manager = new BusinessEntityManager();

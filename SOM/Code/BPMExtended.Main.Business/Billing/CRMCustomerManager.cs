@@ -1974,6 +1974,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StSubTypes.Id");
             var subType = esq.AddColumn("StSubTypes.StName");
             esq.AddColumn("StSponsor");
+            esq.AddColumn("StWholeSale");
             var sponsorcol = esq.AddColumn("StSponsor.Id");
 
 
@@ -1991,6 +1992,7 @@ namespace BPMExtended.Main.Business
                 var floor = entities[0].GetColumnValue("StFloor");
                 var buildingNumber = entities[0].GetColumnValue("StBuildingNumber");
                 var mailBox = entities[0].GetColumnValue("StMailBox");
+                var wholeSale = entities[0].GetColumnValue("StWholeSale");
                 var street = entities[0].GetColumnValue("StStreet");
                 string pathId = entities[0].GetColumnValue("StLinePathID").ToString();
                 var subTypeId = entities[0].GetColumnValue("StSubTypesId");
@@ -2057,18 +2059,22 @@ namespace BPMExtended.Main.Business
                         PhoneNumber = phoneNumber.ToString(),
                         SubType = subTypeName,//new CommonManager().GetSubTypeIdentifier(subTypeId.ToString()),
                         ServiceResource = serviceResourceId,
-                        City = city.ToString(),
-                        Building = buildingNumber.ToString(),
-                        Floor = floor.ToString(),
-                        Town = town.ToString(),
-                        StateProvince = province.ToString(),
-                        Street= street.ToString(),
-                        Region = area.ToString(),
-                        CountryId = GetCountryNumber(countryId.ToString()),
-                        Mailbox = mailBox.ToString(),
-                        SponsorId = GetCRMCustomerInfo(sponsorId.ToString(),null).CustomerId,
-                        //LocationType = locationType.ToString(),
-                        Notes = addressNotes.ToString(),
+                        ContractInfo = new ContractInfoDetails
+                        {
+                            City = city.ToString(),
+                            Building = buildingNumber.ToString(),
+                            Floor = floor.ToString(),
+                            Town = town.ToString(),
+                            StateProvince = province.ToString(),
+                            Street = street.ToString(),
+                            Region = area.ToString(),
+                            CountryId = GetCountryNumber(countryId.ToString()),
+                            Mailbox = mailBox.ToString(),
+                            SponsorId = sponsorId != null? GetCRMCustomerInfo(sponsorId.ToString(), null).CustomerId : null,
+                            AddressNotes = addressNotes.ToString(),
+                            WholeSale = wholeSale.ToString()
+                        },
+                        CustomerType = new CommonManager().GetCustomerType(requestId.ToString()),
                         CSO = info.csoBSCSId,
                         RatePlanId = ratePlanId,
                         Services = contractServices,

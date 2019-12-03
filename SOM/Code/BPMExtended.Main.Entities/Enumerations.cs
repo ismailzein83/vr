@@ -22,6 +22,14 @@ namespace BPMExtended.Main.Entities
         Undefined = 5
     }
 
+    public enum CustomerType
+    {
+        None = 0,
+        Residential = 1,
+        Enterprise = 2,
+        Official = 3
+    }
+
     public class EntitySchemaNameAttribute : Attribute
     {
         public string schemaName { get; private set; }
@@ -515,7 +523,7 @@ namespace BPMExtended.Main.Entities
         [EntitySchemaName("StDisablePaymentPlan")]
         [CompletedStep("StStepId")]
         [CompletedStepId("78901F89-A682-4367-85F7-5F4DE34A6641")]
-        DisablePaymentPlan = 57,
+        DisablePaymentPlan = 58,
 
     }
     public enum ContractStatus

@@ -218,7 +218,7 @@ namespace BPMExtended.Main.Business
             return hasRelatedADSL;
         }
 
-        public GetContractAddressOutput GetContractAddressAndDirectoryInfo(string contractId)
+        public GetContractAddressOutput GetContractAddressAndDirectoryInfo(string contractId , string requestId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;    
@@ -241,10 +241,11 @@ namespace BPMExtended.Main.Business
 
             using (var client = new SOMClient())
             {
-                item = client.Get<GetContractAddressOutput>(String.Format("api/SOM.ST/Billing/GetContractAddressAndDirectoryInfo?ContractId={0}&ServiceId={1}", contractId, serviceId));
-                if(item.Language != null) item.Language = new CommonManager().GetLanguageIdByName(item.Language);
-                if (item.Career != null)  item.Career = new CommonManager().GetCareerIdByName(item.Career);
-                if (item.BusinessType != null)  item.BusinessType = new CommonManager().GetBusinessTypeIdByName(item.BusinessType);
+                item = client.Get<GetContractAddressOutput>(String.Format("api/SOM.ST/Billing/GetContractInfoDetailsAndDirectoryInfo?contractId={0}&customerType={1}&ServiceId={2}", contractId,new CommonManager().GetCustomerType(requestId.ToString()), serviceId));
+
+                //if (item.ContractInfoDetails.Language != null) item.ContractInfoDetails.Language = new CommonManager().GetLanguageIdByName(item.ContractInfoDetails.Language);
+                //if (item.ContractInfoDetails.Career != null)  item.ContractInfoDetails.Career = new CommonManager().GetCareerIdByName(item.ContractInfoDetails.Career);
+                //if (item.ContractInfoDetails.BusinessType != null)  item.ContractInfoDetails.BusinessType = new CommonManager().GetBusinessTypeIdByName(item.ContractInfoDetails.BusinessType);
             }
 
             return item;

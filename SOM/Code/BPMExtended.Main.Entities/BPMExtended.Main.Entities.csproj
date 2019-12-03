@@ -75,6 +75,7 @@
     <Compile Include="BSCSSuspensionFromDunningOutput.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContractDetails.cs" />
+    <Compile Include="ContractInfoDetails.cs" />
     <Compile Include="Contracts\LeasedLineContractEntity.cs" />
     <Compile Include="CreditDebitNotesDetail.cs" />
     <Compile Include="CreditDebitNotes.cs" />

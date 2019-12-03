@@ -85,8 +85,8 @@ namespace BPMExtended.Main.Business
                 var country = entities[0].GetColumnValue("StCountryName");
 
                 ContractManager mngr = new ContractManager();
-                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
-                var sequence = contractAddressOutput.Address.Sequence.ToString();
+                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString());
+                var sequence = contractAddressOutput.ContractInfoDetails.Sequence.ToString();
 
                 //check if one of the services is a vpn sevice
                 List <CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
@@ -217,8 +217,8 @@ namespace BPMExtended.Main.Business
                 var OldlinePathId = entities[0].GetColumnValue("StOldLinePathId");
 
                 ContractManager mngr = new ContractManager();
-                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
-                var sequence = contractAddressOutput.Address.Sequence.ToString();
+                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString());
+                var sequence = contractAddressOutput.ContractInfoDetails.Sequence.ToString();
 
                 //check if one of the services is a vpn sevice
                 List<CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
@@ -332,8 +332,8 @@ namespace BPMExtended.Main.Business
                 var OldlinePathId = entities[0].GetColumnValue("StOldLinePathId");
 
                 ContractManager mngr = new ContractManager();
-                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
-                var sequence = contractAddressOutput.Address.Sequence.ToString();
+                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString());
+                var sequence = contractAddressOutput.ContractInfoDetails.Sequence.ToString();
 
                 //check if one of the services is a vpn sevice
                 List<CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());
@@ -448,8 +448,8 @@ namespace BPMExtended.Main.Business
                 var OldlinePathId = entities[0].GetColumnValue("StOldLinePathId");
 
                 ContractManager mngr = new ContractManager();
-                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString());
-                var sequence = contractAddressOutput.Address.Sequence.ToString();
+                GetContractAddressOutput contractAddressOutput = mngr.GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString());
+                var sequence = contractAddressOutput.ContractInfoDetails.Sequence.ToString();
 
                 //check if one of the services is a vpn sevice
                 List<CustomerContractServiceDetail> contractServices = new ServiceManager().GetContractServicesDetail(contractId.ToString());

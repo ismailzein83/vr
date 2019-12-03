@@ -121,7 +121,7 @@ namespace BPMExtended.Main.Business
                         HasADSL = (bool)hasAnADSL,
                         Address = new Address
                         {
-                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),//new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString()).ContractInfoDetails.Sequence.ToString(),//new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
                             Town = town.ToString(),
@@ -556,7 +556,7 @@ namespace BPMExtended.Main.Business
                         NotApplicableServices = GetNotApplicableServicesOnSwitch(freeReservationSwitchID.ToString(),contractId.ToString()),
                         Address = new Address
                         {
-                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString()).ContractInfoDetails.Sequence.ToString(),
                             //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
@@ -680,7 +680,7 @@ namespace BPMExtended.Main.Business
                         NotApplicableServices = GetNotApplicableServicesOnSwitch(freeReservationSwitchID.ToString(), contractId.ToString()),
                         Address = new Address
                         {
-                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString()).ContractInfoDetails.Sequence.ToString(),
                             //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
@@ -803,7 +803,7 @@ namespace BPMExtended.Main.Business
                         NotApplicableServices = GetNotApplicableServicesOnSwitch(freeReservationSwitchID.ToString(), contractId.ToString()),
                         Address = new Address
                         {
-                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString()).ContractInfoDetails.Sequence.ToString(),
                             //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
@@ -924,7 +924,7 @@ namespace BPMExtended.Main.Business
                         NewLinePathId = newLinePathID.ToString(),
                         Address = new Address
                         {
-                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString()).Address.Sequence.ToString(),
+                            Sequence = new ContractManager().GetContractAddressAndDirectoryInfo(contractId.ToString(),requestId.ToString()).ContractInfoDetails.Sequence.ToString(),
                             //new CRMCustomerManager().GetCustomerAddress(customerId.ToString()).Sequence.ToString(),
                             StateProvince = province.ToString(),
                             City = city.ToString(),
