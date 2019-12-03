@@ -3544,8 +3544,11 @@ vr-label[fullwidth] .vr-control-label {
 }
 
 vr-label-dynamic .vr-control-label.clickable {
-    text-decoration: underline;
     cursor: pointer;
+}
+
+vr-label-dynamic .vr-control-label.clickable:hover {
+    text-decoration: underline;
 }
 
 label[vr-alert].alert {
