@@ -36,10 +36,31 @@
             };
             $scope.scopeModel.saveSwitch = function () {
                 $scope.isLoading = true;
-                switchEditorDirectiveAPI.save().finally(function () {
+                var resetSwitchSyncDataPromise = UtilsService.createPromiseDeferred();
+
+                switchEditorDirectiveAPI.save().then(function () {
+                    VRNotificationService.showConfirmation("Do you want to reset the switch info in order to trigger the full sync with the next route sync process?").then(function (result) {
+                        if (result) {
+                            WhS_BE_SwitchAPIService.ResetSwitchSyncData(switchId).then(function () {
+                                resetSwitchSyncDataPromise.resolve();
+                            }).catch(function (error) {
+                                resetSwitchSyncDataPromise.resolve();
+                            });
+                        }
+                        else {
+                            resetSwitchSyncDataPromise.resolve();
+                        }
+                    });
+
+                }).catch(function (error) {
+                    resetSwitchSyncDataPromise.resolve();
+                });
+
+                resetSwitchSyncDataPromise.promise.then(function () {
                     $scope.isLoading = false;
                 });
             };
+
             $scope.onSwitchEditorReady = function (api) {
                 switchEditorDirectiveAPI = api;
                 switchEditorReadyDeferred.resolve();
@@ -47,7 +68,7 @@
         }
         function load() {
             $scope.isLoading = true;
-                loadAllControls();
+            loadAllControls();
         }
 
         function loadAllControls() {

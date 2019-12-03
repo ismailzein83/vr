@@ -84,7 +84,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
             foreach (var routeTableName in routeTablesNames)
             {
                 var createGistIndexQuery = CreateGistIndex_Query.Replace("#TABLENAMEWITHSCHEMA#", $"{tableNamePrefix}{routeTableName}");
-                createGistIndexQuery = createGistIndexQuery.Replace("#GUID#", Guid.NewGuid().ToString("N"));
+                createGistIndexQuery = createGistIndexQuery.Replace("#TABLENAME#", routeTableName);
 
                 queries.Add(new FinalizeItem() { Description = $"Build GIST index for {routeTableName}", Query = createGistIndexQuery });
 
@@ -146,7 +146,7 @@ namespace TOne.WhS.RouteSync.Cataleya.Data.Postgres
 
         const string DropBackUpRouteTableIfExists_Query = @"Drop Table IF EXISTS #TABLENAMEWITHSCHEMA#;";
 
-        const string CreateGistIndex_Query = @"create index idx_#TABLENAMEWITHSCHEMA#_code on #TABLENAMEWITHSCHEMA#  using gist(code);";
+        const string CreateGistIndex_Query = @"create index idx_#TABLENAME#_code on #TABLENAMEWITHSCHEMA#  using gist(code);";
 
         const string CreatePrimaryIndex_Query = @"ALTER TABLE #TABLENAMEWITHSCHEMA# ADD constraint route_pkey_#GUID# PRIMARY KEY (Code);";
 
