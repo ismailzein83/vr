@@ -22,7 +22,8 @@
                 linktofield: "@",
                 linkfromfield: "@",
                 onnodeclicked: "=",
-                onlinkclicked: "="
+                onlinkclicked: "=",
+                editable: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -52,7 +53,7 @@
                     mouseDrop: function (e) { finishDrop(e, null); },
                     "undoManager.isEnabled": true,
                 });
-
+                myDiagram.isReadOnly = !ctrl.editable;
                 myDiagram.addModelChangedListener(function (evt) {
                     if (!evt.isTransactionFinished) return;
                     var txn = evt.object;
@@ -95,11 +96,6 @@
                 function finishDrop(e, grp) {
                     if (e.diagram.div.id == "palletId")
                         return;
-                    //if (grp.data.Id == 7) {
-                    //    e.diagram.currentTool.doCancel();
-                    //    return;
-                    //}
-
                     var ok = (grp !== null
                       ? grp.addMembers(grp.diagram.selection, true)
                       : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
@@ -141,215 +137,673 @@
                     )
                   ));
 
-
-                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.SLOT.value, g(go.Group, "Auto",
-                      {
-                          background: "transparent",
-                          computesBoundsAfterDrag: true,
-                          mouseDrop: finishDrop,
-                          selectionObjectName: "SlotGroup",
-                          locationObjectName: "SlotGroup",
-                          resizable: true,
-                          resizeObjectName: "SlotGroup",
-                          locationSpot: go.Spot.Center,
-                          handlesDragDropForMembers: true,
-                          padding: 5,
-                          layout: g(go.GridLayout,
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.OLT.value, g(go.Group, "Auto",
+                 {
+                     background: "transparent",
+                     ungroupable: true,
+                     computesBoundsAfterDrag: true,
+                     locationSpot: go.Spot.Center,
+                     mouseDrop: finishDrop,
+                     selectionObjectName: "OLTGroup",
+                     locationObjectName: "OLTGroup",
+                     resizable: true,
+                     resizeObjectName: "OLTGroup",
+                     handlesDragDropForMembers: true,
+                     layout: g(go.GridLayout,
+                     {
+                         wrappingColumn: 2, alignment: go.GridLayout.Position,
+                         cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                     })
+                 },
+                   g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                   g(go.Panel, "Vertical",
+                     {
+                         minSize: new go.Size(50, 100),
+                         name: "OLTGroup"
+                     },
+                     g(go.Panel, "Horizontal",
                          {
-                             wrappingColumn: 2,
-                             alignment: go.GridLayout.Position,
-                             cellSize: new go.Size(1, 1)
-                         })
-                      },
-                      g(go.Shape, "Rectangle",
-                          { fill: null, stroke: "#333333", strokeWidth: 2 }
+                             stretch: go.GraphObject.Horizontal, background: "#33D3E5"
+                         },
+                         g(go.TextBlock,
+                         {
+                             alignment: go.Spot.Left,
+                             editable: true,
+                             margin: 5,
+                             font: "bold 16px sans-serif",
+                             opacity: 0.75,
+                             stroke: "#404040"
+                         },
+                         new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
                      ),
-                      g(go.Panel, "Vertical",
-                       {
-                           minSize: new go.Size(50, 100),
-                           name: "SlotGroup"
-                       }, g(go.Placeholder, { padding: 10, background: "transparent" }))
+                     g(go.Placeholder, { padding: 10, alignment: go.Spot.TopLeft })
+                   )
+                 ));
 
-               ));
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.Splitter.value, g("Group", "Auto",
+                 {
+                     background: "transparent",
+                     computesBoundsAfterDrag: true,
+                     mouseDrop: finishDrop,
+                     selectionObjectName: "SplitterGroup",
+                     locationObjectName: "SplitterGroup",
+                     resizable: true,
+                     groupable: false,
+                     toLinkable: false,
+                     fromLinkable: false,
+                     resizeObjectName: "SplitterGroup",
+                     locationSpot: go.Spot.Center,
+                     handlesDragDropForMembers: true,
+                     layout: g(go.GridLayout,
+                         {
+                             wrappingColumn: 2, alignment: go.GridLayout.Position,
+                             cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                         })
+                 },
+                    g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                    g(go.Panel, "Vertical",
+                     {
+                         minSize: new go.Size(50, 100),
+                         name: "SplitterGroup"
+                     },
+                                     g(go.Panel, "Horizontal",
+                     {
+                         stretch: go.GraphObject.Horizontal,
+                         background: "#33D3E5"
+                     },
+                                     g(go.TextBlock,
+                     {
+                         alignment: go.Spot.Left,
+                         editable: true,
+                         margin: 5,
+                         font: "bold 18px sans-serif",
+                         opacity: 0.75,
+                         stroke: "#404040"
+                     },
+                                     new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                                     ),
+                                     g(go.Placeholder,
+                     {
+                         padding: 10, alignment: go.Spot.TopLeft
+                     })
+                     )
+                 ));
+
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.FDB.value, g("Group", "Auto",
+                    {
+                        background: "transparent",
+                        computesBoundsAfterDrag: true,
+                        mouseDrop: finishDrop,
+                        selectionObjectName: "FDBGroup",
+                        locationObjectName: "FDBGroup",
+                        resizable: true,
+                        groupable: false,
+                        toLinkable: false,
+                        fromLinkable: false,
+                        resizeObjectName: "FDBGroup",
+                        locationSpot: go.Spot.Center,
+                        handlesDragDropForMembers: true,
+                        layout: g(go.GridLayout,
+                    {
+                        wrappingColumn: 2, alignment: go.GridLayout.Position,
+                        cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                    })
+                    },
+                        g(go.Shape, "Rectangle", {
+                            fill: null, stroke: "#33D3E5", strokeWidth: 2
+                        }),
+                            g(go.Panel, "Vertical",
+                    {
+                        minSize: new go.Size(50, 100),
+                        name: "FDBGroup"
+                    },
+                            g(go.Panel, "Horizontal",
+                                {
+                                    stretch: go.GraphObject.Horizontal,
+                                    background: "#33D3E5"
+                                },
+                                g(go.TextBlock,
+                                {
+                                    alignment: go.Spot.Left,
+                                    editable: true,
+                                    margin: 5,
+                                    font: "bold 18px sans-serif",
+                                    opacity: 0.75,
+                                    stroke: "#404040"
+                                },
+                                new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                            ),
+                            g(go.Placeholder,
+                        {
+                            padding: 10, alignment: go.Spot.TopLeft
+                        })
+                      )
+                ));
+
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.MDF.value, g("Group", "Auto",
+                    {
+                        background: "transparent",
+                        computesBoundsAfterDrag: true,
+                        mouseDrop: finishDrop,
+                        selectionObjectName: "MDFGroup",
+                        locationObjectName: "MDFGroup",
+                        resizable: true,
+                        groupable: false,
+                        toLinkable: false,
+                        fromLinkable: false,
+                        resizeObjectName: "MDFGroup",
+                        locationSpot: go.Spot.Center,
+                        handlesDragDropForMembers: true,
+                        layout: g(go.GridLayout,
+                        {
+                            wrappingColumn: 2, alignment: go.GridLayout.Position,
+                            cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                        })
+                    },
+                    g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                        g(go.Panel, "Vertical",
+                        {
+                            minSize: new go.Size(50, 100),
+                            name: "MDFGroup"
+                        },
+                        g(go.Panel, "Horizontal",
+                            {
+                                stretch: go.GraphObject.Horizontal,
+                                background: "#33D3E5"
+                            },
+                            g(go.TextBlock,
+                            {
+                                alignment: go.Spot.Left,
+                                editable: true,
+                                margin: 5,
+                                font: "bold 18px sans-serif",
+                                opacity: 0.75,
+                                stroke: "#404040"
+                            },
+                            new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                        ),
+                        g(go.Placeholder,
+                        {
+                            padding: 10, alignment: go.Spot.TopLeft
+                        })
+                    )
+                ));
+
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.DP.value, g("Group", "Auto",
+                    {
+                        background: "transparent",
+                        computesBoundsAfterDrag: true,
+                        mouseDrop: finishDrop,
+                        selectionObjectName: "DPGroup",
+                        locationObjectName: "DPGroup",
+                        resizable: true,
+                        groupable: false,
+                        toLinkable: false,
+                        fromLinkable: false,
+                        resizeObjectName: "DPGroup",
+                        locationSpot: go.Spot.Center,
+                        handlesDragDropForMembers: true,
+                        layout: g(go.GridLayout,
+                        {
+                            wrappingColumn: 2, alignment: go.GridLayout.Position,
+                            cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                        })
+                    },
+                    g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                        g(go.Panel, "Vertical",
+                        {
+                            minSize: new go.Size(50, 100),
+                            name: "DPGroup"
+                        },
+                        g(go.Panel, "Horizontal",
+                            {
+                                stretch: go.GraphObject.Horizontal,
+                                background: "#33D3E5"
+                            },
+                            g(go.TextBlock,
+                            {
+                                alignment: go.Spot.Left,
+                                editable: true,
+                                margin: 5,
+                                font: "bold 18px sans-serif",
+                                opacity: 0.75,
+                                stroke: "#404040"
+                            },
+                            new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                        ),
+                        g(go.Placeholder,
+                        {
+                            padding: 10, alignment: go.Spot.TopLeft
+                        })
+                    )
+                ));
+
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.Cabinet.value, g("Group", "Auto",
+                    {
+                        background: "transparent",
+                        computesBoundsAfterDrag: true,
+                        mouseDrop: finishDrop,
+                        selectionObjectName: "CabinetGroup",
+                        locationObjectName: "CabinetGroup",
+                        resizable: true,
+                        groupable: false,
+                        toLinkable: false,
+                        fromLinkable: false,
+                        resizeObjectName: "CabinetGroup",
+                        locationSpot: go.Spot.Center,
+                        handlesDragDropForMembers: true,
+                        layout: g(go.GridLayout,
+                        {
+                            wrappingColumn: 2, alignment: go.GridLayout.Position,
+                            cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                        })
+                    },
+                    g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                        g(go.Panel, "Vertical",
+                        {
+                            minSize: new go.Size(50, 100),
+                            name: "CabinetGroup"
+                        },
+                        g(go.Panel, "Horizontal",
+                            {
+                                stretch: go.GraphObject.Horizontal,
+                                background: "#33D3E5"
+                            },
+                            g(go.TextBlock,
+                            {
+                                alignment: go.Spot.Left,
+                                editable: true,
+                                margin: 5,
+                                font: "bold 18px sans-serif",
+                                opacity: 0.75,
+                                stroke: "#404040"
+                            },
+                            new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                        ),
+                        g(go.Placeholder,
+                        {
+                            padding: 10, alignment: go.Spot.TopLeft
+                        })
+                    )
+                ));
 
 
-                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.IMS.value, g("Group", "Auto",
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.ODF.value, g("Group", "Auto",
                        {
                            background: "transparent",
                            computesBoundsAfterDrag: true,
                            mouseDrop: finishDrop,
-                           selectionObjectName: "IMSGroup",
-                           locationObjectName: "IMSGroup",
+                           selectionObjectName: "ODFGroup",
+                           locationObjectName: "ODFGroup",
                            resizable: true,
                            groupable: false,
                            toLinkable: false,
                            fromLinkable: false,
-                           resizeObjectName: "IMSGroup",
+                           resizeObjectName: "ODFGroup",
                            locationSpot: go.Spot.Center,
                            handlesDragDropForMembers: true,
                            layout: g(go.GridLayout,
-                          {
-                              wrappingColumn: 2, alignment: go.GridLayout.Position,
-                              cellSize: new go.Size(1, 1), spacing: new go.Size(120, 10)
-                          })
+                           {
+                               wrappingColumn: 2, alignment: go.GridLayout.Position,
+                               cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                           })
                        },
                        g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
-                       g(go.Panel, "Vertical",
-                        {
-                            minSize: new go.Size(250, 100),
-                            name: "IMSGroup"
-                        },
-                         g(go.Panel, "Horizontal",
-                           { stretch: go.GraphObject.Horizontal, background: "#33D3E5" },
-                           g(go.TextBlock,
-                             {
-                                 alignment: go.Spot.Left,
-                                 editable: true,
-                                 margin: 5,
-                                 font: "bold 18px sans-serif",
-                                 opacity: 0.75,
-                                 stroke: "#404040"
-                             },
-                             new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
-                         ),
-                         g(go.Placeholder,
-                           { padding: 10, alignment: go.Spot.TopLeft })
-
+                           g(go.Panel, "Vertical",
+                           {
+                               minSize: new go.Size(50, 100),
+                               name: "ODFGroup"
+                           },
+                           g(go.Panel, "Horizontal",
+                               {
+                                   stretch: go.GraphObject.Horizontal,
+                                   background: "#33D3E5"
+                               },
+                               g(go.TextBlock,
+                               {
+                                   alignment: go.Spot.Left,
+                                   editable: true,
+                                   margin: 5,
+                                   font: "bold 18px sans-serif",
+                                   opacity: 0.75,
+                                   stroke: "#404040"
+                               },
+                               new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
                            ),
-                        g(go.Picture,
-	                    {
-	                        name: "Picture",
-	                        desiredSize: new go.Size(50, 50),
-	                        margin: new go.Margin(25, 8, 6, 10),
-	                        imageAlignment: go.Spot.BottomCenter,
-	                        source: "/Client/Images/mini-icons/DiagramSize/ims.png"
-	                    })
+                           g(go.Placeholder,
+                           {
+                               padding: 10, alignment: go.Spot.TopLeft
+                           })
+                     )
                 ));
 
 
-                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.OLT.value, g(go.Group, "Auto",
-                  {
-                      background: "transparent",
-                      ungroupable: true,
-                      computesBoundsAfterDrag: true,
-                      locationSpot: go.Spot.Center,
-                      mouseDrop: finishDrop,
-                      selectionObjectName: "OLTGroup",
-                      locationObjectName: "OLTGroup",
-                      resizable: true,
-                      resizeObjectName: "OLTGroup",
-                      handlesDragDropForMembers: true,
-                      layout: g(go.GridLayout,
-                        {
-                            wrappingColumn: 2, alignment: go.GridLayout.Position,
-                            cellSize: new go.Size(1, 1), spacing: new go.Size(100, 10)
-                        })
-                  },
-                  g(go.Shape, "Rectangle", { fill: null, stroke: "#FFDD33", strokeWidth: 2 }),
-                  g(go.Panel, "Vertical",
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.SDF.value, g("Group", "Auto",
+                {
+                    background: "transparent",
+                    computesBoundsAfterDrag: true,
+                    mouseDrop: finishDrop,
+                    selectionObjectName: "SDFGroup",
+                    locationObjectName: "SDFGroup",
+                    resizable: true,
+                    groupable: false,
+                    toLinkable: false,
+                    fromLinkable: false,
+                    resizeObjectName: "SDFGroup",
+                    locationSpot: go.Spot.Center,
+                    handlesDragDropForMembers: true,
+                    layout: g(go.GridLayout,
                     {
-                        minSize: new go.Size(250, 100),
-                        //maxSize: new go.Size(280, 200),
-                        name: "OLTGroup"
+                        wrappingColumn: 2, alignment: go.GridLayout.Position,
+                        cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                    })
+                },
+                g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                    g(go.Panel, "Vertical",
+                    {
+                        minSize: new go.Size(50, 100),
+                        name: "SDFGroup"
                     },
                     g(go.Panel, "Horizontal",
-                      { stretch: go.GraphObject.Horizontal, background: "#FFDD33" },
-                      g(go.TextBlock,
+                        {
+                            stretch: go.GraphObject.Horizontal,
+                            background: "#33D3E5"
+                        },
+                        g(go.TextBlock,
                         {
                             alignment: go.Spot.Left,
                             editable: true,
                             margin: 5,
-                            font: "bold 16px sans-serif",
+                            font: "bold 18px sans-serif",
                             opacity: 0.75,
                             stroke: "#404040"
                         },
                         new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
                     ),
                     g(go.Placeholder,
-                      { padding: 10, alignment: go.Spot.TopLeft })
+                    {
+                        padding: 10, alignment: go.Spot.TopLeft
+                    })
+              )
+             ));
 
-                  ),
-                  g(go.Picture,
-	                {
-	                    name: "Picture",
-	                    desiredSize: new go.Size(50, 50),
-	                    margin: new go.Margin(25, 8, 6, 10),
-	                    imageAlignment: go.Spot.BottomCenter,
-	                    source: "/Client/Images/mini-icons/DiagramSize/olt.png",
-	                })
+             myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.IMS.value, g("Group", "Auto",
+                    {
+                        background: "transparent",
+                        computesBoundsAfterDrag: true,
+                        mouseDrop: finishDrop,
+                        selectionObjectName: "IMSGroup",
+                        locationObjectName: "IMSGroup",
+                        resizable: true,
+                        groupable: false,
+                        toLinkable: false,
+                        fromLinkable: false,
+                        resizeObjectName: "IMSGroup",
+                        locationSpot: go.Spot.Center,
+                        handlesDragDropForMembers: true,
+                        layout: g(go.GridLayout,
+                        {
+                            wrappingColumn: 2, alignment: go.GridLayout.Position,
+                            cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                        })
+                    },
+                    g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                        g(go.Panel, "Vertical",
+                        {
+                            minSize: new go.Size(50, 100),
+                            name: "IMSGroup"
+                        },
+                        g(go.Panel, "Horizontal",
+                            {
+                                stretch: go.GraphObject.Horizontal,
+                                background: "#33D3E5"
+                            },
+                            g(go.TextBlock,
+                            {
+                                alignment: go.Spot.Left,
+                                editable: true,
+                                margin: 5,
+                                font: "bold 18px sans-serif",
+                                opacity: 0.75,
+                                stroke: "#404040"
+                            },
+                            new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                        ),
+                        g(go.Placeholder,
+                        {
+                            padding: 10, alignment: go.Spot.TopLeft
+                        })
+                  )
+                 ));
+
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.Switch.value, g("Group", "Auto",
+                   {
+                       background: "transparent",
+                       computesBoundsAfterDrag: true,
+                       mouseDrop: finishDrop,
+                       selectionObjectName: "SwitchGroup",
+                       locationObjectName: "SwitchGroup",
+                       resizable: true,
+                       groupable: false,
+                       toLinkable: false,
+                       fromLinkable: false,
+                       resizeObjectName: "SwitchGroup",
+                       locationSpot: go.Spot.Center,
+                       handlesDragDropForMembers: true,
+                       layout: g(go.GridLayout,
+                       {
+                           wrappingColumn: 2, alignment: go.GridLayout.Position,
+                           cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                       })
+                   },
+                   g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                       g(go.Panel, "Vertical",
+                       {
+                           minSize: new go.Size(50, 100),
+                           name: "SwitchGroup"
+                       },
+                       g(go.Panel, "Horizontal",
+                           {
+                               stretch: go.GraphObject.Horizontal,
+                               background: "#33D3E5"
+                           },
+                           g(go.TextBlock,
+                           {
+                               alignment: go.Spot.Left,
+                               editable: true,
+                               margin: 5,
+                               font: "bold 18px sans-serif",
+                               opacity: 0.75,
+                               stroke: "#404040"
+                           },
+                           new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                       ),
+                       g(go.Placeholder,
+                       {
+                           padding: 10, alignment: go.Spot.TopLeft
+                       })
+                 )
                 ));
 
-                myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.Port.value,
+
+                myDiagram.groupTemplateMap.add(DiagramElementTypesEnum.DSLAM.value, g("Group", "Auto",
+                   {
+                       background: "transparent",
+                       computesBoundsAfterDrag: true,
+                       mouseDrop: finishDrop,
+                       selectionObjectName: "DSLAMGroup",
+                       locationObjectName: "DSLAMGroup",
+                       resizable: true,
+                       groupable: false,
+                       toLinkable: false,
+                       fromLinkable: false,
+                       resizeObjectName: "DSLAMGroup",
+                       locationSpot: go.Spot.Center,
+                       handlesDragDropForMembers: true,
+                       layout: g(go.GridLayout,
+                       {
+                           wrappingColumn: 2, alignment: go.GridLayout.Position,
+                           cellSize: new go.Size(1, 1), spacing: new go.Size(50, 10)
+                       })
+                   },
+                   g(go.Shape, "Rectangle", { fill: null, stroke: "#33D3E5", strokeWidth: 2 }),
+                       g(go.Panel, "Vertical",
+                       {
+                           minSize: new go.Size(50, 100),
+                           name: "DSLAMGroup"
+                       },
+                       g(go.Panel, "Horizontal",
+                           {
+                               stretch: go.GraphObject.Horizontal,
+                               background: "#33D3E5"
+                           },
+                           g(go.TextBlock,
+                           {
+                               alignment: go.Spot.Left,
+                               editable: true,
+                               margin: 5,
+                               font: "bold 18px sans-serif",
+                               opacity: 0.75,
+                               stroke: "#404040"
+                           },
+                           new go.Binding("text", ctrl.nodetTextProperty).makeTwoWay())
+                       ),
+                       g(go.Placeholder,
+                       {
+                           padding: 10, alignment: go.Spot.TopLeft
+                       })
+                 )
+                ));
+
+
+                myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.GPON.value,
                  g(go.Node, "Auto",
-                    {
-                        mouseDrop: function (e, nod) { finishDrop(e, nod.containingGroup); }
-                    },
+                {
+                    mouseDrop: function (e, nod) {
+                        finishDrop(e, nod.containingGroup);
+                    }
+                },
+                g(go.Shape, "Circle",
+                {
+                    fill: "#4d8a45",
+                    stroke: "#4d8a45",
+                    strokeWidth: 1,
+                    toLinkable: true,
+                    fromLinkable: true,
+                    toLinkableSelfNode: true,
+                    fromLinkableSelfNode: true,
+                    portId: "",
+                    minSize: new go.Size(15, 15),
+                    maxSize: new go.Size(15, 15)
+                },
+                            new go.Binding("fill", "color")),
+                            g(go.Shape, "Circle",
+                {
+                    fill: "#ffffff",
+                    minSize: new go.Size(10, 10),
+                    maxSize: new go.Size(10, 10)
+                }),
+                            g(go.Shape, "Circle",
+                {
+                    fill: "#333333",
+                    minSize: new go.Size(2, 2),
+                    maxSize: new go.Size(2, 2)
+                }),
+                {
+                    toolTip: g("ToolTip", g(go.TextBlock, { margin: 4 }, new go.Binding("text", ctrl.nodetTextProperty)))
+                }
+                ));
+
+
+
+                myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.Ethernet.value,
+                g(go.Node, "Auto",
+               {
+                   mouseDrop: function (e, nod) {
+                       finishDrop(e, nod.containingGroup);
+                   }
+               },
+                   g(go.Shape, "Circle",
+                {
+                    fill: "#4d8a45",
+                    stroke: "#4d8a45",
+                    strokeWidth: 1,
+                    toLinkable: true,
+                    fromLinkable: true,
+                    toLinkableSelfNode: true,
+                    fromLinkableSelfNode: true,
+                    portId: "",
+                    minSize: new go.Size(15, 15),
+                    maxSize: new go.Size(15, 15)
+                },
+                   new go.Binding("fill", "color")),
+                   g(go.Shape, "Circle",
+                {
+                    fill: "#ffffff",
+                    minSize: new go.Size(10, 10),
+                    maxSize: new go.Size(10, 10)
+                }),
+                   g(go.Shape, "Circle",
+                {
+                    fill: "#333333",
+                    minSize: new go.Size(2, 2),
+                    maxSize: new go.Size(2, 2)
+                })
+               ));
+
+               myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.DevicePort.value,
+                 g(go.Node, "Auto",
+                     {
+                     mouseDrop: function (e, nod) {
+                        finishDrop(e, nod.containingGroup);
+                 }
+                },
                     g(go.Shape, "Circle",
-                    {
-                        fill: "#4d8a45",
-                        stroke: "#4d8a45",
-                        strokeWidth: 1,
-                        toLinkable: true,
-                        fromLinkable: true,
+                 {
+                         fill: "#4d8a45",
+                         stroke: "#4d8a45",
+                    strokeWidth: 1,
+                    toLinkable: true,
+                    fromLinkable: true,
                         toLinkableSelfNode: true,
-                        fromLinkableSelfNode: true,
-                        portId: "",
-                        minSize: new go.Size(15, 15),
-                        maxSize: new go.Size(15, 15)
-                    },
+                    fromLinkableSelfNode: true,
+                    portId: "",
+                            minSize: new go.Size(15, 15),
+                            maxSize: new go.Size(15, 15)
+                },
                     new go.Binding("fill", "color")),
                     g(go.Shape, "Circle",
                     {
-                        fill: "#ffffff",
+                            fill: "#ffffff",
                         minSize: new go.Size(10, 10),
-                        maxSize: new go.Size(10, 10)
-                    }),
+                    maxSize: new go.Size(10, 10)
+                }),
                     g(go.Shape, "Circle",
-                    {
+                        {
                         fill: "#333333",
                         minSize: new go.Size(2, 2),
                         maxSize: new go.Size(2, 2)
-                    })
+                })
                 ));
 
-
-
-                myDiagram.nodeTemplateMap.add(DiagramElementTypesEnum.PortRj.value,
-                 g(go.Node, "Auto",
-                    {
-                        mouseDrop: function (e, nod) { finishDrop(e, nod.containingGroup); }
-                    },
-                    g(go.Shape, "Rectangle",
-                    {
-                        fill: "#FFFFFF",
-                        stroke: "#4d8a45",
-                        strokeWidth: 1,
-                        toLinkable: true,
-                        fromLinkable: true,
-                        portId: "",
-                        minSize: new go.Size(15, 15),
-                        maxSize: new go.Size(15, 15)
-                    },
-                    new go.Binding("fill", "color")),
-                    g(go.Shape, "RoundedRectangle",
-                    {
-                        fill: "#ffffff",
-                        minSize: new go.Size(7, 7),
-                        maxSize: new go.Size(10, 10)
-                    })
-                ));
 
 
                 myDiagram.linkTemplateMap.add("", g(go.Link,
                     {
-                        adjusting: go.Link.Stretch,
+                        routing: go.Link.AvoidsNodes,
+                        corner: 4,
+                        curve: go.Link.JumpGap,
+                        reshapable: true,
+                        resegmentable: true,
                         relinkableFrom: true,
                         relinkableTo: true,
-                        toShortLength: 3
+                        layerName: "Background"
                     },
-                    new go.Binding("points").makeTwoWay(),
-                    g(go.Shape, { strokeWidth: 1.5 }),
-                    g(go.TextBlock,
+                        new go.Binding("points").makeTwoWay(),
+                        g(go.Shape, {
+                            strokeWidth: 1.5
+                        }),
+                        g(go.TextBlock,
                     {
                         textAlign: "center",
                         font: "bold 14px sans-serif",
@@ -358,8 +812,8 @@
                         segmentOffset: new go.Point(NaN, NaN),
                         segmentOrientation: go.Link.OrientUpright
                     },
-                    new go.Binding("text", "text")),
-                    g(go.TextBlock,
+                        new go.Binding("text", "text")),
+                        g(go.TextBlock,
                     {
                         textAlign: "center",
                         font: "bold 14px sans-serif",
@@ -372,16 +826,26 @@
                  )));
 
                 myDiagram.linkTemplateMap.add("SimpleLink", g(go.Link,
-                    {
-                        adjusting: go.Link.Stretch,
-                        relinkableFrom: true,
-                        relinkableTo: true,
-                        toShortLength: 3
-                    },
+                {
+                    routing: go.Link.AvoidsNodes,
+                    corner: 4,
+                    curve: go.Link.JumpGap,
+                    reshapable: true,
+                    resegmentable: true,
+                    relinkableFrom: true,
+                    relinkableTo: true,
+                    layerName: "Background"
+                },
                     new go.Binding("points").makeTwoWay(),
-                    g(go.Shape, { strokeWidth: 1.5, stroke: "red" }),
-                    g(go.Shape, { fromArrow: "BackwardV", stroke: "green", strokeWidth: 0.5 }),
-                    g(go.Shape, { toArrow: "SidewaysV", stroke: "green", strokeWidth: 0.5 })
+                    g(go.Shape, {
+                        strokeWidth: 1.5, stroke: "red"
+                    }),
+                    g(go.Shape, {
+                        fromArrow: "BackwardV", stroke: "green", strokeWidth: 0.5
+                    }),
+                    g(go.Shape, {
+                        toArrow: "SidewaysV", stroke: "green", strokeWidth: 0.5
+                    })
                 ));
 
 
@@ -460,7 +924,8 @@
                 myDiagram.model = ctrl.model;
                 myDiagram.layoutDiagram(true);
 
-                var api = {};
+                var api = {
+                };
 
                 api.load = function (data) {
                     if (data != undefined) {
