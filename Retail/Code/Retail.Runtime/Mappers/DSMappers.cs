@@ -272,7 +272,7 @@ namespace Retail.Runtime
                     {
                         case 0: temp = mocObj; cdr.RecordType = 1; cdr.RecordDirection = 1; break;
                         case 1: temp = mtcObj; cdr.RecordType = 1; cdr.RecordDirection = 2; break;
-                        case 3: temp = inGatewayObj; cdr.RecordType = 4; cdr.RecordDirection = 2; break;
+                        //case 3: temp = inGatewayObj; cdr.RecordType = 4; cdr.RecordDirection = 2; break;
                         default: continue;
                     }
 
@@ -375,18 +375,19 @@ namespace Retail.Runtime
                         cdr.AttemptDateTime = new DateTime(year, month, day, hour, minute, second);
                     }
 
-                    if (temp.translatedNumber > 0)
-                    {
-                        string otherPartyNumber = fields[temp.translatedNumber];
-                        if (!string.IsNullOrEmpty(otherPartyNumber))
-                            cdr.OtherPartyNumber = otherPartyNumber;
-                        else
-                            cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
-                    }
-                    else
-                    {
-                        cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
-                    }
+                    //if (temp.translatedNumber > 0)
+                    //{
+                    //    string otherPartyNumber = fields[temp.translatedNumber];
+                    //    if (!string.IsNullOrEmpty(otherPartyNumber))
+                    //        cdr.OtherPartyNumber = otherPartyNumber;
+                    //    else
+                    //        cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
+                    //}
+                    //else
+                    //{
+                    //    cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
+                    //}
+                    cdr.OtherPartyNumber = fields[temp.OtherPartyNumber];
 
                     if (decimal.TryParse(fields[temp.DurationInSeconds], out decimal durationInSeconds))
                         cdr.DurationInSeconds = durationInSeconds;
