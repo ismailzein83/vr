@@ -7,29 +7,20 @@
     <vr-columns width="1/3row" ng-if="scopeModel.saveChangesToAccountState">
         <vr-textbox value="scopeModel.actionType" label="Action Type"></vr-textbox>
     </vr-columns>
-    <vr-columns width="1/3row" >
-        <vr-textbox value="scopeModel.companyFieldName" label="Company Field Name" isrequired="true"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/3row" >
-        <vr-textbox value="scopeModel.branchFieldName" label="Branch Field Name"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/3row" >
-        <vr-textbox value="scopeModel.userFieldName" label="User Field Name" ></vr-textbox>
-    </vr-columns>
 
     <retail-be-accounttype-selector on-ready="scopeModel.onCompanyAccountTypeSelectorReady"
-                                    normal-col-num="6"
+                                    normal-col-num="4"
                                     customlabel="Company Account Type"
                                     isrequired="true">
     </retail-be-accounttype-selector>
     <retail-be-accounttype-selector on-ready="scopeModel.onSiteAccountTypeSelectorReady"
                                     customlabel="Site Account Type"
-                                    normal-col-num="6"
+                                    normal-col-num="4"
                                     isrequired="true">
     </retail-be-accounttype-selector>
     <retail-be-accounttype-selector on-ready="scopeModel.onUserAccountTypeSelectorReady"
                                     customlabel="User Account Type"
-                                    normal-col-num="6">
+                                    normal-col-num="4">
     </retail-be-accounttype-selector>
 </vr-row>
 <vr-row>

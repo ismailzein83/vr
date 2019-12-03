@@ -56,7 +56,15 @@
                 api.load = function (payload) {
                     mainpayload = payload != undefined ? payload.Settings : undefined;
                     var promises = [];
-                    accountBEDefinitionId = mainpayload != undefined ? mainpayload.ExtendedSettings != undefined ? mainpayload.ExtendedSettings.AccountBEDefinitionId : undefined : undefined;
+                    if (mainpayload != undefined) {
+                        var extendedSettings = mainpayload.ExtendedSettings;
+                        if (extendedSettings != undefined) {
+                            accountBEDefinitionId = extendedSettings.AccountBEDefinitionId;
+                            $scope.scopeModel.companyFieldName = extendedSettings.CompanyFieldName;
+                            $scope.scopeModel.branchFieldName = extendedSettings.BranchFieldName;
+                            $scope.scopeModel.userFieldName = extendedSettings.UserFieldName;
+                        }
+                    }
 
                     var businessEntityDefinitionSelectorLoadPromise = loadBusinessEntityDefinitionSelector();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
@@ -69,8 +77,12 @@
 
                 api.getData = function getData() {
                     var data = directiveAPI.getData();
-                    if (data != undefined)
+                    if (data != undefined) {
                         data.AccountBEDefinitionId = beDefinitionSelectorAPI.getSelectedIds();
+                        data.CompanyFieldName = $scope.scopeModel.companyFieldName;
+                        data.BranchFieldName = $scope.scopeModel.branchFieldName;
+                        data.UserFieldName = $scope.scopeModel.userFieldName;
+                    }
                     return data;
                 };
 
@@ -86,7 +98,7 @@
                 } else {
                     mainpayload = {
                         classFQTN: "Retail.Teles.Business.ChangeUsersRGsActionDefinition, Retail.Teles.Business"
-                    }
+                    };
                 }
                 return directiveAPI.load(mainpayload);
             }
