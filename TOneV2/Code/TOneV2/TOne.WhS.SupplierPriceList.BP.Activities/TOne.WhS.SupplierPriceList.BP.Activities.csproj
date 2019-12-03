@@ -148,6 +148,7 @@
     <Compile Include="SetReceivedPricelistAsStarted.cs" />
     <Compile Include="SetReceivedPricelistAsWaitingConfirmation.cs" />
     <Compile Include="ShifTime.cs" />
+    <Compile Include="AdjustImportedRateCodeEED.cs" />
     <Compile Include="StructureImportedZones.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureDataByCountries.cs" />

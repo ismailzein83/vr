@@ -32,7 +32,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                 importedZone.ImportedCodes.AddRange(importedDataByZone.ImportedCodes);
 
-                importedZone.ImportedNormalRate = GetMaxNormalRateEED(importedDataByZone.ImportedNormalRates);
+                importedZone.ImportedNormalRate = GetNormalRate(importedDataByZone.ImportedNormalRates);
 
                 foreach (KeyValuePair<int, List<ImportedRate>> kvp in importedDataByZone.ImportedOtherRates)
                 {
@@ -56,18 +56,30 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             this.AllImportedZones.Set(context, new AllImportedZones() { Zones = importedZones });
         }
 
-        private ImportedRate GetMaxNormalRateEED(List<ImportedRate> importedRates)
+        private ImportedRate GetNormalRate(List<ImportedRate> importedRates)
         {
-            DateTime maxImportedRateEED = new DateTime();
-            ImportedRate lastImportedRate = null;
+            if (importedRates == null || importedRates.Count == 0)
+                return null;
+
+            DateTime? maxEED = DateTime.MinValue;
+            DateTime minBED = DateTime.MaxValue;
+
+            var firstNormalRate = importedRates.ElementAt(0);
             foreach (var importedRate in importedRates)
             {
-                if (!importedRate.EED.HasValue)
-                    return importedRate;
-                if (importedRate.EED > maxImportedRateEED)
-                    lastImportedRate = importedRate;
+                maxEED = importedRate.EED.VRGreaterThan(maxEED)
+                         ? importedRate.EED
+                         : maxEED;
+                minBED = importedRate.BED < minBED
+                         ? importedRate.BED
+                         : minBED;
             }
-            return lastImportedRate;
+
+            var NormalRateCopy = firstNormalRate.VRDeepCopy();
+            NormalRateCopy.BED = minBED;
+            NormalRateCopy.EED = maxEED;
+
+            return NormalRateCopy;
         }
     }
 }

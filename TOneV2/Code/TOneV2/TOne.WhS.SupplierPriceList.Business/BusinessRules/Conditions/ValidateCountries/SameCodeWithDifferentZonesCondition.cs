@@ -1,49 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Common.Business;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SameCodeWithDifferentZonesCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCountry != null);
+            return target as ImportedCountry != null;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCountry country = context.Target as ImportedCountry;
+            var country = context.Target as ImportedCountry;
             var messages = new List<string>();
             var duplicatedCodes = new List<string>();
             foreach (var importedCode in country.ImportedCodes)
             {
                 if (!duplicatedCodes.Contains(importedCode.Code))
                 {
-                    var zones = country.ImportedCodes
-                        .Where(x => x.Code == importedCode.Code && !x.ZoneName.Equals(importedCode.ZoneName, StringComparison.InvariantCultureIgnoreCase))
-                        .Select(item => item.ZoneName);
+                    HashSet<string> zoneNames = GetZoneNamesWithDuplicateCodes(importedCode, country.ImportedCodes);
 
-                    if (zones.Count() > 0)
+                    if (zoneNames.Count() > 0)
                     {
-                        var invalidZones = new List<string>();
-                        invalidZones.Add(importedCode.ZoneName);
-                        foreach (var zoneName in zones)
-                        {
-                            if (!invalidZones.Any(item => item.ToLower() == zoneName.ToLower()))
-                                invalidZones.Add(zoneName);
-                        }
-                        
                         duplicatedCodes.Add(importedCode.Code);
-                        messages.Add(string.Format("Duplicate Code '{0}' found in ({1}).", importedCode.Code, string.Join(", ",invalidZones)));
+                        messages.Add(string.Format("Duplicate Code '{0}' found in ({1}).", importedCode.Code, string.Join(", ", zoneNames)));
                     }
                 }
             }
@@ -59,6 +43,21 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             throw new NotImplementedException();
         }
-
+        private HashSet<string> GetZoneNamesWithDuplicateCodes(ImportedCode codeToCompare, IEnumerable<ImportedCode> importedCodes)
+        {
+           var zoneNames = new HashSet<string>();
+            foreach (var importedCode in importedCodes)
+            {
+                if (codeToCompare.Code == importedCode.Code && !importedCode.ZoneName.Equals(codeToCompare.ZoneName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (importedCode.EED.HasValue && codeToCompare.EED.HasValue || (!importedCode.EED.HasValue && !codeToCompare.EED.HasValue))
+                    {
+                        zoneNames.Add(importedCode.ZoneName);
+                        zoneNames.Add(codeToCompare.ZoneName);
+                    }
+                }
+            }
+            return zoneNames;
+        }
     }
 }

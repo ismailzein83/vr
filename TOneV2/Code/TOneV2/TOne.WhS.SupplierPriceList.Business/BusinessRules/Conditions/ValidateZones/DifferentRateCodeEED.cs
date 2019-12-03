@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         //This rule should be last rule to execute in "ValidateZones"
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedDataByZone != null);
+            return target as ImportedDataByZone != null;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
@@ -32,12 +32,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
                 if (importedRateEED.HasValue && maxCodeEED.HasValue && maxCodeEED.Value != importedRateEED.Value)
                     messages.Add($"Code EED is different than rate EED in zone {importedZone.ZoneName}");
-
-                if (importedRateEED.HasValue && importedZone.ImportedCodes.Any(item => !item.EED.HasValue))
-                    messages.Add($"Cannot set rate EED for zone {importedZone.ZoneName} if no related code EED exist");
-
-                if (!importedRateEED.HasValue && importedZone.ImportedCodes.All(item => item.EED.HasValue))
-                    messages.Add($"Cannot set rate EED for zone {importedZone.ZoneName} if no related rate EED exist");
             }
 
             if (messages.Count > 0)
