@@ -2864,7 +2864,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Taux/Mn</Value>
+                              <Value>Taux/SMS</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>

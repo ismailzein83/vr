@@ -1971,11 +1971,19 @@ La facture doit être payée avant </Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>Fax: </Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Parameters!CompanyFax.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -3072,7 +3080,7 @@ La facture doit être payée avant </Value>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>21.15007cm</Height>
+        <Height>21.52049cm</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3143,10 +3151,10 @@ La facture doit être payée avant </Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox24</rd:DefaultName>
-              <Top>0.33474in</Top>
-              <Left>6.26813in</Left>
+              <Top>0.33475in</Top>
+              <Left>7.00363in</Left>
               <Height>0.25in</Height>
-              <Width>1.13542in</Width>
+              <Width>0.92814in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -3179,8 +3187,8 @@ La facture doit être payée avant </Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
-              <Top>0.26813cm</Top>
-              <Left>1.45655cm</Left>
+              <Top>0.26815cm</Top>
+              <Left>3.32473cm</Left>
               <Height>0.40571cm</Height>
               <Width>14.28811cm</Width>
               <ZIndex>2</ZIndex>
@@ -3223,8 +3231,8 @@ La facture doit être payée avant </Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
-              <Top>1.07954cm</Top>
-              <Left>1.45655cm</Left>
+              <Top>1.07956cm</Top>
+              <Left>3.32473cm</Left>
               <Height>0.40571cm</Height>
               <Width>14.28811cm</Width>
               <ZIndex>3</ZIndex>
@@ -3267,11 +3275,55 @@ La facture doit être payée avant </Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox31</rd:DefaultName>
-              <Top>0.67384cm</Top>
-              <Left>1.45655cm</Left>
+              <Top>0.67386cm</Top>
+              <Left>3.32473cm</Left>
               <Height>0.40571cm</Height>
               <Width>14.28811cm</Width>
               <ZIndex>4</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox52">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Fax: </Value>
+                      <Style>
+                        <FontFamily>Verdana</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Parameters!CompanyFax.Value</Value>
+                      <Style>
+                        <FontFamily>Verdana</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox31</rd:DefaultName>
+              <Top>1.52055cm</Top>
+              <Left>3.32473cm</Left>
+              <Height>0.40571cm</Height>
+              <Width>14.28811cm</Width>
+              <ZIndex>5</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3525,6 +3577,12 @@ La facture doit être payée avant </Value>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="CompanyProfileName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyFax">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
