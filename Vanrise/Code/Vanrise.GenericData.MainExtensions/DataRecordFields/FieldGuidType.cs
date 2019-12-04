@@ -176,6 +176,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return Utilities.ConvertNonNullValueToGuid(originalValue);
         }
 
+        public static Guid ParseNonNullValueToGuid(Object originalValue)
+        {
+            return Utilities.ConvertNonNullValueToGuid(originalValue);
+        }
+
         public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
             if (context.FieldDescription == null)
