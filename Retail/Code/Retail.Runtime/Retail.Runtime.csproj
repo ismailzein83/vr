@@ -682,6 +682,7 @@
     <Compile Include="Mappers\ZajilMappers.cs" />
     <Compile Include="Tasks\AliSlaymanTask.cs" />
     <Compile Include="Tasks\AliAtouiTask.cs" />
+    <Compile Include="Tasks\KalakeshTask.cs" />
     <Compile Include="Tasks\CustomCodeWriter.cs" />
     <Compile Include="Tasks\CustomParser.cs" />
     <Compile Include="ITask.cs" />
