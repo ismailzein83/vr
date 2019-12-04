@@ -5,7 +5,7 @@
                  pagingtype="'Pager'"
                  menuactions="menuActions"
                  idfield="Entity.InvoiceId"
-                 defaultsortbyfieldname="'Entity.InvoiceId'" normalcell enableautoexport="true">
+                 defaultsortbyfieldname="'Entity.CreatedTime'" normalcell enableautoexport="true">
         <vr-datagridcolumn fixedwidth="25" invisibleheader headertext="'Select'" disablesorting ng-show="canSelectInvoices" isfielddynamic="true">
             <span ng-hide="dataItem.isDeleted">
                 <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onInvoiceSelect(dataItem)"></vr-check>
