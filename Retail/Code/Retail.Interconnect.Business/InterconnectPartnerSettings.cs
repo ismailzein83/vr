@@ -39,7 +39,8 @@ namespace Retail.Interconnect.Business
         BillingCompanyContact = 20,
         AccountBillingContact = 21,
         OriginalAmount = 22,
-        CompanyProfileName = 23
+        CompanyProfileName = 23,
+        CompanyFax = 24
     }
 
     public enum InterconnectPartnerType { Customer = 0, Supplier = 1, Settlement = 2 }
@@ -179,7 +180,7 @@ namespace Retail.Interconnect.Business
             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, companyProfile.Address, true);
             AddCompanyProfilePhoneNumbers(rdlcReportParameters, companyProfile);
 
-            if (accountProfile.Faxes != null)
+            if (accountProfile.Faxes != null && accountProfile.Faxes.Count > 0)
             {
                 string faxes = string.Join(", ", accountProfile.Faxes);
                 AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, faxes, true);
@@ -251,6 +252,9 @@ namespace Retail.Interconnect.Business
             AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyProfileName, companySetting.ProfileName, true);
             AddRDLCParameter(rdlcReportParameters, RDLCParameter.VatID, companySetting.VatId, true);
             AddRDLCParameter(rdlcReportParameters, RDLCParameter.BillingCompanyEmail, companySetting.BillingEmails, true);
+
+            if (companySetting.Faxes != null && companySetting.Faxes.Count > 0)
+                AddRDLCParameter(rdlcReportParameters, RDLCParameter.CompanyFax, string.Join(", ", companySetting.Faxes), true);
         }
 
         private void AddRDLCParameter(Dictionary<string, VRRdlcReportParameter> rdlcReportParameters, RDLCParameter key, string value, bool isVisible)
