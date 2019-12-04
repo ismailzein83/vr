@@ -17,6 +17,8 @@ namespace BPMExtended.Main.Entities
         public string Floor{ get; set; }
         public string CountryId { get; set; }
         public string Mailbox { get; set; }
+        public string SponsorId { get; set; }
+        public string WholeSale { get; set; }
         public string Sequence { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }

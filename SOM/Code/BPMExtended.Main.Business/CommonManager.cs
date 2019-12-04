@@ -772,7 +772,6 @@ namespace BPMExtended.Main.Business
 
                     esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Account");
                     esq.AddColumn("Id");
-                    esq.AddColumn("StRequestId");
                     esq.AddColumn("StSegment");
                     esq.AddColumn("StSegment.Id");
 

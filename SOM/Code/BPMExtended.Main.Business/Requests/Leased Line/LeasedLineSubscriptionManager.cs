@@ -61,7 +61,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StAddressNotes");
             esq.AddColumn("StLocation");
             esq.AddColumn("StLocation.Id");
-
+            esq.AddColumn("StMailBox");
+            esq.AddColumn("StWholeSale");
 
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
@@ -82,6 +83,8 @@ namespace BPMExtended.Main.Business
                 var town = entities[0].GetColumnValue("StTownName");
                 var locationType = entities[0].GetColumnValue("StLocationName");
                 var addressNotes = entities[0].GetColumnValue("StAddressNotes");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
+                var wholeSale = entities[0].GetColumnValue("StWholeSale");
 
                 CRMCustomerInfo info = contactId != null ? new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null) : new CRMCustomerManager().GetCRMCustomerInfo(null, accountId.ToString());
 
@@ -116,23 +119,28 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new LeasedLineContractOnHoldInput
                     {
+                        ContractInfo = new ContractInfoDetails
+                        {
+                            City = city.ToString(),
+                            Building = buildingNumber.ToString(),
+                            Floor = floor.ToString(),
+                            Town = town.ToString(),
+                            Street = street.ToString(),
+                            Region = area.ToString(),
+                            CountryId = "206",
+                            AddressNotes = addressNotes.ToString(),
+                            Mailbox = mailBox.ToString(),
+                            WholeSale = wholeSale.ToString(),
+                        },
                         LinePathId = linePathId,
                         SubType = "LeaseLine",
-                        ServiceResource = serviceResourceId,
-                        City = city.ToString(),
-                        Building = buildingNumber.ToString(),
-                        Floor = floor.ToString(),
-                        Town = town.ToString(),
+                        ServiceResource = serviceResourceId,                      
                         StateProvince = province.ToString(),
-                        Street = street.ToString(),
-                        Region = area.ToString(),
-                        CountryId = "206",
                         CSO = info.csoBSCSId,//info.csoId,
                         RatePlanId = ratePlanId,//ratePlanId.ToString(),
                         Services = contractServices,
                         DepositServices = depositServices,
-                        LocationType = locationType.ToString(),
-                        Notes = addressNotes.ToString(),
+                       
                         CommonInputArgument = new CommonInputArgument()
                         {
                             ContactId = contactId != null ? contactId.ToString() : null,

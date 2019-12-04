@@ -105,6 +105,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StStreet");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StFloor");
+            esq.AddColumn("StMailBox");
+            esq.AddColumn("StWholeSale");
+            esq.AddColumn("StAddressNotes");
             esq.AddColumn("StLocation");
             esq.AddColumn("StLocation.Id");
 
@@ -126,6 +129,9 @@ namespace BPMExtended.Main.Business
                 var province = entities[0].GetColumnValue("StProvinceName");
                 var town = entities[0].GetColumnValue("StTownName");
                 var contractId = entities[0].GetColumnValue("StContractID");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
+                var wholeSale = entities[0].GetColumnValue("StWholeSale");
+                var notes = entities[0].GetColumnValue("StAddressNotes");
                 var username = entities[0].GetColumnValue("StUserName");
                 var locationType= entities[0].GetColumnValue("StLocationName");
 
@@ -176,22 +182,28 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new ADSLContractOnHoldInput
                     {
+                        ContractInfo = new ContractInfoDetails
+                        {
+                            City = city.ToString(),
+                            Building = buildingNumber.ToString(),
+                            Floor = floor.ToString(),
+                            Town = town.ToString(),
+                            StateProvince = province.ToString(),
+                            Street = street.ToString(),
+                            Region = area.ToString(),
+                            CountryId = "206",
+                            Mailbox = mailBox.ToString(),
+                            WholeSale= wholeSale.ToString(),
+                            AddressNotes = notes.ToString()
+                        },
+                        CustomerType = new CommonManager().GetCustomerType(requestId.ToString()),
                         LinePathId = linePathId,//"11112222",
                         ServiceResource = serviceResourceId,
                         UserName= username.ToString(),
-                        City = city.ToString(),
-                        TelephonyContractId = contractId.ToString(),
-                        Building = buildingNumber.ToString(),
-                        Floor = floor.ToString(),
-                        Town = town.ToString(),
-                        StateProvince = province.ToString(),
-                        Street = street.ToString(),
-                        Region = area.ToString(),
+                        TelephonyContractId = contractId.ToString(),                      
                         CSO = info.csoBSCSId,
                         SubType =  "ADSL",
-                        CountryId= "206",
                         RatePlanId = ratePlanId,
-                        LocationType= locationType.ToString(),
                         DepositServices = depositServices,
                         Services = contractServices,
                         CommonInputArgument = new CommonInputArgument()

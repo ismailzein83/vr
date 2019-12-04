@@ -131,6 +131,9 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFloor");
             esq.AddColumn("StLocation");
             esq.AddColumn("StLocation.Id");
+            esq.AddColumn("StMailBox");
+            esq.AddColumn("StWholeSale");
+            esq.AddColumn("StAddressNotes");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -151,6 +154,9 @@ namespace BPMExtended.Main.Business
                 var contractId = entities[0].GetColumnValue("StContractID");
                 var username = entities[0].GetColumnValue("StUserName");
                 var locationType = entities[0].GetColumnValue("StLocationName");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
+                var wholeSale = entities[0].GetColumnValue("StWholeSale");
+                var notes = entities[0].GetColumnValue("StAddressNotes");
 
                 CRMCustomerInfo info = contactId != null ? new CRMCustomerManager().GetCRMCustomerInfo(contactId.ToString(), null) : new CRMCustomerManager().GetCRMCustomerInfo(null, accountId.ToString());
 
@@ -186,21 +192,26 @@ namespace BPMExtended.Main.Business
                 {
                     InputArguments = new GSHDSLContractOnHoldInput
                     {
+                        ContractInfo = new ContractInfoDetails
+                        {
+                            City = city.ToString(),
+                            Building = buildingNumber.ToString(),
+                            Floor = floor.ToString(),
+                            Town = town.ToString(),
+                            Street = street.ToString(),
+                            Region = area.ToString(),
+                            CountryId = "206",
+                            Mailbox = mailBox.ToString(),
+                            WholeSale = wholeSale.ToString(),
+                            AddressNotes = notes.ToString()
+                        },
                         LinePathId = linePathId,//"11112222",
                         ServiceResource = serviceResourceId,
                         UserName = username.ToString(),
-                        City = city.ToString(),
-                        Building = buildingNumber.ToString(),
-                        Floor = floor.ToString(),
-                        Town = town.ToString(),
                         StateProvince = province.ToString(),
-                        Street = street.ToString(),
-                        Region = area.ToString(),
                         CSO = info.csoBSCSId,
                         SubType = "GSHDSL",
-                        CountryId = "206",
                         RatePlanId = ratePlanId,
-                        LocationType= locationType.ToString(),
                         Services = contractServices,
                         CommonInputArgument = new CommonInputArgument()
                         {

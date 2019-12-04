@@ -794,8 +794,6 @@ namespace BPMExtended.Main.Business
                 ContractAddress = contract.ContractAddress,
                 ContractBalance = contract.CurrentBalance,
                 RatePlanId = contract.RateplanId,
-                SponsorId = contract.SponsorId,
-                WholeSale = contract.WholeSale,
                 RatePlanName = ratePlanName,
                 PathId = contract.LinePathId,
                 PhoneNumber = contract.PhoneNumber,

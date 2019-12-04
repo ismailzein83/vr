@@ -9,7 +9,6 @@ namespace BPMExtended.Main.Entities
     public class TelephonyContractEntity : ContractEntity
     {
         public string PhoneNumber { get; set; }
-        public string SponsorId { get; set; }
         public bool IsPABX { get; set; }
     }
 }
