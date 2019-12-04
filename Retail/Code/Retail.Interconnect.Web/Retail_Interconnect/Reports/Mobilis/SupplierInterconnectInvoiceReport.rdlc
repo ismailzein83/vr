@@ -2951,9 +2951,9 @@ La facture doit être payée avant</Value>
           </Paragraphs>
           <rd:DefaultName>Textbox24</rd:DefaultName>
           <Top>0.33891in</Top>
-          <Left>6.46247in</Left>
+          <Left>7.01511in</Left>
           <Height>0.25in</Height>
-          <Width>1.13542in</Width>
+          <Width>0.91667in</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
@@ -2987,7 +2987,7 @@ La facture doit être payée avant</Value>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
           <Top>0.27871cm</Top>
-          <Left>1.46396cm</Left>
+          <Left>2.86766cm</Left>
           <Height>0.40571cm</Height>
           <Width>14.77432cm</Width>
           <ZIndex>2</ZIndex>
@@ -3032,7 +3032,7 @@ La facture doit être payée avant</Value>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
           <Top>1.09012cm</Top>
-          <Left>1.46396cm</Left>
+          <Left>2.86766cm</Left>
           <Height>0.40571cm</Height>
           <Width>14.77432cm</Width>
           <ZIndex>3</ZIndex>
@@ -3077,7 +3077,7 @@ La facture doit être payée avant</Value>
           </Paragraphs>
           <rd:DefaultName>Textbox31</rd:DefaultName>
           <Top>0.68442cm</Top>
-          <Left>1.46396cm</Left>
+          <Left>2.86766cm</Left>
           <Height>0.40571cm</Height>
           <Width>14.77432cm</Width>
           <ZIndex>4</ZIndex>

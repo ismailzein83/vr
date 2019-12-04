@@ -1412,11 +1412,19 @@ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>Fax: </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                            <TextRun>
+                              <Value>=Parameters!CompanyFax.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Normal</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2482,6 +2490,14 @@ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS
             <Paragraph>
               <TextRuns>
                 <TextRun>
+                  <Value>Tel: </Value>
+                  <Style>
+                    <FontFamily>Verdana</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
                   <Value>=Parameters!BillingCompanyPhone.Value</Value>
                   <Style>
                     <FontFamily>Verdana</FontFamily>
@@ -2537,6 +2553,50 @@ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS
           <Height>0.40571cm</Height>
           <Width>13.73803cm</Width>
           <ZIndex>4</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="Textbox33">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Fax: </Value>
+                  <Style>
+                    <FontFamily>Verdana</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>=Parameters!CompanyFax.Value</Value>
+                  <Style>
+                    <FontFamily>Verdana</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>Textbox31</rd:DefaultName>
+          <Top>1.57868cm</Top>
+          <Left>2.8667cm</Left>
+          <Height>0.40571cm</Height>
+          <Width>13.73803cm</Width>
+          <ZIndex>5</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -3067,6 +3127,18 @@ iif(IIF(Len(Parameters!SMSServiceTypes.Value) = 0,true,false)OR Parameters!NoSMS
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="CompanyProfileName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CompanyFax">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Fax">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

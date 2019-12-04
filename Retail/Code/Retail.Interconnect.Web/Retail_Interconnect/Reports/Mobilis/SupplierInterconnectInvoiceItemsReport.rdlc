@@ -2332,7 +2332,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Taux/Mn</Value>
+                              <Value>Taux/SMS</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3361,7 +3361,7 @@
         <Top>1.61131in</Top>
         <Left>0.17541in</Left>
         <Height>1.20866in</Height>
-        <Width>7.84604in</Width>
+        <Width>7.84605in</Width>
         <ZIndex>1</ZIndex>
         <Visibility>
           <Hidden>=Parameters!NoSMS.Value</Hidden>
@@ -4975,7 +4975,7 @@
     <Height>11.02997cm</Height>
     <Style />
   </Body>
-  <Width>20.37448cm</Width>
+  <Width>20.37451cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
