@@ -747,6 +747,7 @@ namespace Retail.Runtime
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("ICX_CDR");
 
             int rowCount = 0;
+            int lineNumber = 0;
 
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             System.IO.StreamReader sr = importedData.StreamReader;
@@ -758,6 +759,7 @@ namespace Retail.Runtime
             while (!sr.EndOfStream)
             {
                 string cdrLine = sr.ReadLine();
+                lineNumber++;
                 if (string.IsNullOrEmpty(cdrLine))
                     continue;
 
@@ -962,7 +964,7 @@ namespace Retail.Runtime
                 }
                 catch (Exception ex)
                 {
-                    failedRecordIdentifiers.Add(rowCount);
+                    failedRecordIdentifiers.Add(lineNumber);
                 }
             }
 
