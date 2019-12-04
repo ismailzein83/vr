@@ -57,10 +57,11 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         var xAxisValues = [];
         var enablePoints = null;
         var chartMenuActions;
-
+        var isLive = false;
+        var currentNumberOfPoints = 0;
         function initializeController() {
             ctrl.isSettingsVisible = function () {
-                return (ctrl.hidesettings == undefined || ctrl.hidesettings == false) && isChartAvailable;
+                return (ctrl.hidesettings == undefined || ctrl.hidesettings == false) && isChartAvailable && !isLive;
             };
 
             ctrl.changeSettings = changeSettings;
@@ -405,7 +406,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     }
                 }
                 else {
-                    xAxisValues.push(xValue);
+                   xAxisValues.push(xValue);
                 }
 
                 for (var i = 0; i < series.length; i++) {
@@ -447,8 +448,8 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                             chartMenuAction.clicked(event);
                         }
                         else {
-
-                        }
+               
+                }
                     }
                 },
 
@@ -511,7 +512,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 labels: {
                     enabled: xAxisDefinition.hideAxes == undefined ? true : false,
                     //format: '{value} km'
-                },
+                }, 
             };
 
             var plotLines = [];
@@ -629,11 +630,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             }
 
 
-            function getFormatter(title, y, unit) {
-                if (unit != undefined)
-                    return title + ': ' + formatValue(y) + ' ' + unit;
-                return title + ': ' + formatValue(y);
-            }
+            
             if (chartDefinition.useAnimation) {
                 chartSettings.animation = {
                     duration: 2000,
@@ -665,8 +662,154 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             });
         }
 
+
+        function defineChartSeries(seriesDefinitions) {
+            var series = [];
+            var i = 0;
+            angular.forEach(seriesDefinitions, function (sDef) {
+                var serieSettings = $.grep(currentChartSettings.series, function (s) {
+                    return sDef.title == s.title;
+                })[0];
+
+                if (serieSettings.selected) {
+                    var serie = {
+                        id: "ID_" + i++,
+                        name: getSeriesName(sDef.title, sDef.unit),
+                        title: sDef.title,
+                        serieDefinition: sDef,
+                        color: sDef.color,
+                        data: [],
+                        events:
+                        {
+                            click: function (e) {
+                                // onDataItemClicked(currentChartSource.chartData[e.point.index]);
+                            }
+                        },
+                        type: serieSettings.type ? serieSettings.type : (sDef.type ? sDef.type : chartDefinition.type),
+                        unit: sDef.unit
+                    };
+                    series.push(serie);
+                }
+            });
+
+            return series;
+        }
+
+        function getFormatter(title, y, unit) {
+            if (unit != undefined)
+                return title + ': ' + formatValue(y) + ' ' + unit;
+            return title + ': ' + formatValue(y);
+        }
+
+        function getSeriesName(title, unit) {
+            if (unit != undefined) {
+                return title + " ( " + unit + " )";
+            }
+            return title;
+        }
+
+        function renderLiveChart(chartSource) {
+            isLive = true;
+
+            var chartDefinition = chartSource.chartDefinition;
+            var seriesDefinitions = chartSource.seriesDefinitions;
+            var xAxisDefinition = chartSource.xAxisDefinition;
+            var series = defineChartSeries(seriesDefinitions);
+
+            //chartSettings
+            var chartSettings = {
+                zoomType: 'x',
+                options3d: {
+                    enabled: false,
+                    alpha: 10,
+                    beta: 10,
+                    depth: 0,
+                    viewDistance: 25
+                },
+                events: {
+                    load: function () {
+                        chartAPI = this;
+                    },
+                }, animation:true
+            };
+
+            //titleSettings
+            var titleSettings = {
+                text: chartDefinition.title
+            };
+
+            //xAxisSettings
+            var xAxisSettings = {
+                visible: xAxisDefinition.hideAxes == true ? false : true,
+                tickWidth: xAxisDefinition.hideAxes == true ? 0 : 1,
+                lineWidth: xAxisDefinition.hideAxes == true ? 0 : 1,
+                showEmpty: xAxisDefinition.hideAxes == true ? false : true,
+                labels: {
+                    enabled: true,
+                    formatter: function () {
+                        return  getFormatedXValue(this.value);
+                    }
+                },
+                type: 'datetime', 
+            };
+
+            //yAxisSettings
+            var yAxisSettings = {
+                title: {
+                    text: chartDefinition.yAxisTitle
+                },
+            };
+
+            //tooltipSettings
+            var tooltipSettings = {
+                formatter: function () {
+                    var s = '<b>' + getFormatedXValue(this.x) + '</b>';
+                    if (xAxisDefinition.hideAxesTitle)
+                        s = undefined;
+                    $.each(this.points, function (i, point) {
+                        if (s == undefined)
+                            s = '';
+                        else
+                            s += '<br/>';
+                        s += '<span style="color:' + point.series.color + '">\u25CF</span> ' + getFormatter(point.series.userOptions.title, point.y, point.series.userOptions.unit);
+                    });
+
+                    if (this.point) {
+                        if (s == undefined)
+                            s = '';
+                        else
+                            s += '<br/>';
+                        s += '<span style="color:' + this.point.series.color + '">\u25CF</span> ' + getFormatter(this.point.series.userOptions.title, this.point.y, point.series.userOptions.unit);
+                    }
+
+                    return s;
+                },
+                shared: true
+            };
+
+            api.hideChart();
+
+            setTimeout(function () {
+                chartObj = chartElement.highcharts({
+                    chart: chartSettings,
+                    title: titleSettings,
+                    xAxis: xAxisSettings,
+                    yAxis: yAxisSettings,
+                    series: series,
+                    tooltip: tooltipSettings,
+                    exporting: {
+                        enabled: ctrl.hideexporticon == undefined
+                    } 
+                });
+                isChartAvailable = true;
+                $scope.$apply();
+            });
+        }
         function getXValue(dataItem) {
             var xValue = eval('dataItem.' + currentChartSource.xAxisDefinition.titlePath);
+            return getFormatedXValue(xValue);
+        }
+        function getFormatedXValue(xValue) {
             if (currentChartSource.xAxisDefinition.isDateTime)
                 xValue = dateFormat((UtilsService.createDateFromString(xValue)), "dd-mmm-yy HH:MM:ss");
 
@@ -682,7 +825,12 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
             var xValue = eval('dataItem.' + currentChartSource.xAxisDefinition.valuePath);
             return xValue;
         }
-
+        function getXTimeRecordValue(dataItem) {
+            var xValue = eval('dataItem.' + currentChartSource.xAxisDefinition.titlePath);
+            if (currentChartSource.xAxisDefinition.isDateTime || currentChartSource.xAxisDefinition.isTime || currentChartSource.xAxisDefinition.isDate)
+                return xValue.getTime();
+            return xValue;
+        }
         function getYValue(sDef, dataItem) {
             return eval('dataItem.' + sDef.valuePath);
         }
@@ -715,6 +863,27 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     });
 
                 }
+
+            };
+
+            api.addPoint = function (item) {
+                currentNumberOfPoints++;
+                var series = chartAPI.series;
+                var xValue = getXTimeRecordValue(item);
+
+                var shiftData = currentChartSource.chartDefinition.numberOfPoints < currentNumberOfPoints?true:false;
+
+                for (var i = 0; i < series.length; i++) {
+                    var serie = series[i];
+                    var sDef = currentChartSource.seriesDefinitions[i];
+                    var yValue = getYValue(sDef, item);
+                    var objeValue = { x: xValue, y: yValue };
+                    serie.addPoint(objeValue, true, shiftData, {
+                        duration: 1000,
+                        //easing: "jswing"
+                    });
+                }
+               // chartAPI.redraw();
             };
 
             api.updateValues = function (items) {
@@ -808,7 +977,19 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                 renderChart(currentChartSource);
                 resizeChart(1);
             };
+            api.renderLiveChart = function (chartDefinition, seriesDefinitions, xAxisDefinition) {
+                currentChartSource = {
+                    isSingleDimension: false,
+                    chartDefinition: chartDefinition,
+                    seriesDefinitions: seriesDefinitions,
+                    xAxisDefinition: xAxisDefinition,
+                };
 
+                if (chartDefinition != undefined && chartDefinition.enablePoints != undefined)
+                    enablePoints = chartDefinition.enablePoints;
+                initializeChartSettings();
+                renderLiveChart(currentChartSource);
+            };
             if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                 ctrl.onReady(api);
         }
