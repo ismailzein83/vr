@@ -241,17 +241,15 @@ namespace Retail.Runtime
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Record Analysis C5 Raw Record");
 
             int rowCount = 0;
+            int lineNumber = 0;
 
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             System.IO.StreamReader sr = importedData.StreamReader;
 
-            //Reading Headers Line
-            if (!sr.EndOfStream)
-                sr.ReadLine();
-
             while (!sr.EndOfStream)
             {
                 string cdrLine = sr.ReadLine();
+                lineNumber++;
                 if (string.IsNullOrEmpty(cdrLine))
                     continue;
 
@@ -456,7 +454,7 @@ namespace Retail.Runtime
                 }
                 catch (Exception ex)
                 {
-                    failedRecordIdentifiers.Add(rowCount);
+                    failedRecordIdentifiers.Add(lineNumber);
                 }
             }
 
@@ -752,10 +750,6 @@ namespace Retail.Runtime
             StreamReaderImportedData importedData = ((StreamReaderImportedData)(data));
             System.IO.StreamReader sr = importedData.StreamReader;
 
-            //Reading Headers Line
-            if (!sr.EndOfStream)
-                sr.ReadLine();
-
             while (!sr.EndOfStream)
             {
                 string cdrLine = sr.ReadLine();
@@ -779,8 +773,8 @@ namespace Retail.Runtime
                     dynamic temp;
                     switch (recordType)
                     {
-                        case 0: temp = mocObj; break;
-                        case 1: temp = mtcObj; break;
+                        //case 0: temp = mocObj; break;
+                        //case 1: temp = mtcObj; break;
                         case 3: temp = inGatewayObj; break;
                         default: continue;
                     }
