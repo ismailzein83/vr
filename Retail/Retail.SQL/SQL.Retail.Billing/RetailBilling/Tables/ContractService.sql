@@ -24,8 +24,11 @@
     [VoiceVolumeMobile]       INT              NULL,
     [VoiceVolumePreferredNb]  INT              NULL,
     [StatusReasonID]          UNIQUEIDENTIFIER NULL,
+    [NIMPathID]               BIGINT           NULL,
     CONSTRAINT [PK__Contract__3214EC270B91BA14] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

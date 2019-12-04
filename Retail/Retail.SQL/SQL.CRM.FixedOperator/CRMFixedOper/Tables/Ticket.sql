@@ -22,8 +22,12 @@
     [Attachments]      NVARCHAR (MAX)   NULL,
     [Area]             BIGINT           NULL,
     [FreeNotes]        VARCHAR (255)    NULL,
+    [AreaID]           BIGINT           NULL,
+    [SiteID]           BIGINT           NULL,
     CONSTRAINT [PK__Ticket__3214EC2755F4C372] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

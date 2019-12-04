@@ -137,5 +137,9 @@
     <Build Include="CRMFixedOper\Tables\Decree.sql" />
     <Build Include="CRMFixedOper\Tables\ContractServiceTypeOption.sql" />
     <Build Include="CRMFixedOper\Tables\ContractServiceType.sql" />
+    <Build Include="CRMFixedOper\Tables\ServiceTypeNetworkService.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_VPNLegsRemoval.sql" />
+    <Build Include="CRMFixedOper\Tables\Order_VPNLegsAddition.sql" />
+    <Build Include="CRMFixedOper\Tables\NetworkServiceType.sql" />
   </ItemGroup>
 </Project>

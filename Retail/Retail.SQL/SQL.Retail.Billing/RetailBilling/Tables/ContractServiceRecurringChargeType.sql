@@ -9,6 +9,10 @@
     [LastModifiedTime]            DATETIME         NULL,
     [LastModifiedBy]              INT              NULL,
     [timestamp]                   ROWVERSION       NULL,
+    [DefaultCharge]               NVARCHAR (MAX)   NULL,
+    [UnavailableInRatePlan]       BIT              NULL,
     CONSTRAINT [PK__Contract__3214EC2757DD0BE4] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

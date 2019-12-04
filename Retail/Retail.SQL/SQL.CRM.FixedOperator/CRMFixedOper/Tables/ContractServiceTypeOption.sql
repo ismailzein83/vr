@@ -21,6 +21,9 @@
     [LastModifiedTime]           DATETIME         NULL,
     [LastModifiedBy]             INT              NULL,
     [timestamp]                  ROWVERSION       NULL,
+    [RestrictToTechnologyID]     UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK__Contract__3214EC2729E1370A] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

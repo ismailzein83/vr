@@ -15,6 +15,9 @@
     [timestamp]                       ROWVERSION       NULL,
     [HasOptions]                      BIT              NULL,
     [Rank]                            INT              NULL,
+    [OptionsRestrictedToTechnology]   BIT              NULL,
     CONSTRAINT [PK__Contract__3214EC272610A626] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
