@@ -965,6 +965,22 @@ namespace Vanrise.Common
                 itemsOrderedByDependencies.Add(item);
         }
 
+        public static object ConvertNonNullValueToType(object originalValue, Type type)
+        {
+            if (type.Equals(typeof(Guid)))
+                return ConvertNonNullValueToGuid(originalValue);
+            else
+                return Convert.ChangeType(originalValue, type);
+        }
+
+        public static Guid ConvertNonNullValueToGuid(Object originalValue)
+        {
+            if (originalValue is Guid || originalValue is Guid?)
+                return (Guid)originalValue;
+            else
+                return Guid.Parse(originalValue.ToString());
+        }
+
         private class PercentageItemWithDecimalPart
         {
             public IPercentageItem PercentageItem { get; set; }

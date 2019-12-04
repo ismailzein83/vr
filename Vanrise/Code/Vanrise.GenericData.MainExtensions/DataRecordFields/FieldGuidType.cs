@@ -173,15 +173,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
-            return ParseNonNullValueToGuid(originalValue);
-        }
-
-        public static Guid ParseNonNullValueToGuid(Object originalValue)
-        {
-            if (originalValue is Guid || originalValue is Guid?)
-                return (Guid)originalValue;
-            else
-                return Guid.Parse(originalValue.ToString());
+            return Utilities.ConvertNonNullValueToGuid(originalValue);
         }
 
         public override void GetValueByDescription(IGetValueByDescriptionContext context)
