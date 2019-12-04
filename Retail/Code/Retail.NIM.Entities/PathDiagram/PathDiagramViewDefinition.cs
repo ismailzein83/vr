@@ -12,5 +12,7 @@ namespace Retail.NIM.Entities
         public override Guid ConfigId { get { return new Guid("5046F437-65A4-4306-BE74-32FED4E4E647"); } }
 
         public override string RuntimeDirective { get { return "retail-nim-pathdiagram-viewruntime"; } }
+
+        public string ParentFieldName { get; set; }
     }
 }

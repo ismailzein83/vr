@@ -63,6 +63,7 @@
     <Compile Include="NodePortType\NodePortTypeInfoFilter.cs" />
     <Compile Include="NodePortType\NodePortType.cs" />
     <Compile Include="NodePortType\NodePortTypeInfo.cs" />
+    <Compile Include="NodePort\NodePort.cs" />
     <Compile Include="NodePort\NodePortInfo.cs" />
     <Compile Include="NodePort\SetPortFaultyInput.cs" />
     <Compile Include="NodePort\SetPortFreeInput.cs" />
@@ -76,7 +77,9 @@
     <Compile Include="NodeType\NodeTypeInfoFilter.cs" />
     <Compile Include="Node\Node.cs" />
     <Compile Include="PathConnection\PathConnection.cs" />
-    <Compile Include="PathDiagram\PathDiagramData.cs" />
+    <Compile Include="PathDiagram\PathDiagram.cs" />
+    <Compile Include="PathDiagram\PathDiagramLink.cs" />
+    <Compile Include="PathDiagram\PathDiagramNode.cs" />
     <Compile Include="PathDiagram\PathDiagramViewDefinition.cs" />
     <Compile Include="PathDiagram\PathDiagramViewRuntime.cs" />
     <Compile Include="PathPort\PathPort.cs" />

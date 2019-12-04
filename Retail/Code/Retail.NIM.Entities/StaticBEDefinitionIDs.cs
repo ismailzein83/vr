@@ -23,7 +23,14 @@ namespace Retail.NIM.Entities
 
         public static Guid SwitchTypeId = new Guid("8C3EA9B7-07EB-42CC-8B7D-78AACDFC8FF6");
         public static Guid DSLAMTypeId = new Guid("37EA9CA7-9099-4F9A-8279-8985B47591B5");
+        public static Guid IMSTypeId = new Guid("7F9A03B3-76B0-4859-BE55-2264C41B7144");
 
+        public static Guid OLTSlotTypeId = new Guid("068BF920-C718-4A32-B716-179CA586144C");
+        public static Guid SwitchSlotTypeId = new Guid("CCE72FDC-496B-46C2-A37D-E70DB36E7C11");
+
+        public static Guid EthernetPortTypeId = new Guid("CB4148CD-5B7D-4835-BE11-AF6578D74A2A");
+        public static Guid GPONPortTypeId = new Guid("FFF0D97A-378E-49A5-A859-2BAFE6088BB9");
+        public static Guid SwitchDeviceTypeId = new Guid("76365D98-25BC-4732-B535-BA7A2F347B2B");
 
     }
 }

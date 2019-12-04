@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Retail.NIM.Entities
 {
-    public class PathDiagramViewRuntime
+    public class PathDiagram
     {
-        public long PathId { get; set; }
-        public List<PathDiagramNode> PathDiagramData { get; set; }
+        public List<PathDiagramNode> PathDiagramNodes { get; set; }
+        public List<PathDiagramLink> PathDiagramLinks { get; set; }
     }
 }
