@@ -100,6 +100,7 @@
     <Compile Include="BPTaskTypes\BPGenericTaskTypeSettingsFilter.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GenericBEActionSettings\OpenBPInstanceViewerAction.cs" />
+    <Compile Include="GenericBEActionSettings\OpenBPTaskGenericBEAction.cs" />
     <Compile Include="GenericBEActionSettings\StartBPProcessAction.cs" />
     <Compile Include="GenericBECustomActionSettings\StartBPProcessCustomAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
