@@ -1,8 +1,8 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPTaskService.$inject = ['LabelColorsEnum', 'BPTaskStatusEnum', 'VRModalService', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRCommon_ModalWidthEnum','UtilsService'];
-    function BusinessProcess_BPTaskService(LabelColorsEnum, BPTaskStatusEnum, VRModalService, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRCommon_ModalWidthEnum, UtilsService) {
+    BusinessProcess_BPTaskService.$inject = ['LabelColorsEnum', 'BPTaskStatusEnum', 'VRModalService', 'BusinessProcess_BPTaskAPIService', 'BusinessProcess_BPTaskTypeAPIService', 'VRCommon_ModalWidthEnum', 'UtilsService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VR_GenericData_GenericBEActionService'];
+    function BusinessProcess_BPTaskService(LabelColorsEnum, BPTaskStatusEnum, VRModalService, BusinessProcess_BPTaskAPIService, BusinessProcess_BPTaskTypeAPIService, VRCommon_ModalWidthEnum, UtilsService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEActionService) {
         function getStatusColor(status) {
             if (status === BPTaskStatusEnum.New.value) return LabelColorsEnum.Primary.color;
             if (status === BPTaskStatusEnum.Started.value) return LabelColorsEnum.Info.color;
@@ -13,7 +13,7 @@
 
         function openTask(bpTaskId) {
 
-            BusinessProcess_BPTaskTypeAPIService.GetBPTaskTypeByTaskId(bpTaskId).then(function (bpTaskType) {
+            return BusinessProcess_BPTaskTypeAPIService.GetBPTaskTypeByTaskId(bpTaskId).then(function (bpTaskType) {
                 var url = bpTaskType.Settings.Editor;
 
                 var parameters = {
@@ -36,7 +36,7 @@
         };
 
         function assignTask(onUserAssigned, userIds) {
-            var modalParameters = { userIds: userIds};
+            var modalParameters = { userIds: userIds };
 
             var modalSettings = {};
 
@@ -56,11 +56,48 @@
                 BusinessEntityDefinitionId: "d33fd65a-721f-4ae1-9d41-628be9425796"
             };
         }
+
+        function registerOpenBPTaskBEAction() {
+            var openBPTaskActionType = {
+                ActionTypeName: "OpenBPTaskGenericBEAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var fieldValues;
+                    var getGenericBusinessEntityPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(payload.businessEntityDefinitionId, payload.genericBusinessEntityId).then(function (response) {
+                        if (response != undefined && response.FieldValues != undefined)
+                            fieldValues = response.FieldValues;
+                    });
+
+                    return UtilsService.waitPromiseNode({
+                        promises: [getGenericBusinessEntityPromise],
+                        getChildNode: function () {
+                            var childPromises = [];
+
+                            if (fieldValues != undefined) {
+                                var genericBEAction = payload.genericBEAction;
+                                var taskIdFieldName = genericBEAction != undefined && genericBEAction.Settings != undefined ? genericBEAction.Settings.TaskIdFieldName : undefined;
+                                var taskId = fieldValues[taskIdFieldName];
+
+                                if (taskId != undefined) {
+                                    childPromises.push(openTask(taskId));
+                                }
+                            }
+                            return { promises: childPromises };
+                        }
+                    });
+                }
+            };
+
+            VR_GenericData_GenericBEActionService.registerActionType(openBPTaskActionType);
+        }
         return ({
             getStatusColor: getStatusColor,
             openTask: openTask,
             assignTask: assignTask,
-            getTaskIdFieldType: getTaskIdFieldType
+            getTaskIdFieldType: getTaskIdFieldType,
+            registerOpenBPTaskBEAction: registerOpenBPTaskBEAction
         });
     }
     appControllers.service('BusinessProcess_BPTaskService', BusinessProcess_BPTaskService);
