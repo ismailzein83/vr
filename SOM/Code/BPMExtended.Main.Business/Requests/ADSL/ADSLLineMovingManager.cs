@@ -201,6 +201,8 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StFloor");
             esq.AddColumn("StBuildingNumber");
             esq.AddColumn("StStreet");
+            esq.AddColumn("StMailBox");
+            esq.AddColumn("StWholeSale");
             esq.AddColumn("StCity");
             esq.AddColumn("StCity.Id");
             esq.AddColumn("StArea");
@@ -216,6 +218,7 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StCountry.Id");
             esq.AddColumn("StLinePathId");
             esq.AddColumn("StNewLinePathId");
+            esq.AddColumn("StAddressNotes");
 
             esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", requestId);
             esq.Filters.Add(esqFirstFilter);
@@ -242,6 +245,8 @@ namespace BPMExtended.Main.Business
                 bool isSameSwitch = (bool)entities[0].GetColumnValue("StIsSameSwitch");
                 var oldLinePathId = entities[0].GetColumnValue("StLinePathId");
                 var newLinePathId = entities[0].GetColumnValue("StNewLinePathId");
+                var mailBox = entities[0].GetColumnValue("StMailBox");
+                var notes = entities[0].GetColumnValue("StAddressNotes");
 
 
                 SOMRequestInput<ADSLLineMovingRequestInput> somRequestInput = new SOMRequestInput<ADSLLineMovingRequestInput>
@@ -259,7 +264,9 @@ namespace BPMExtended.Main.Business
                             Building = buildingNumber.ToString(),
                             Floor = floor.ToString(),
                             Street = street.ToString(),
-                            Sequence = new ContractManager().GetTelephonyContract(contractId.ToString()).ContractAddress.Sequence
+                            Sequence = new ContractManager().GetTelephonyContract(contractId.ToString()).ContractAddress.Sequence,
+                            Mailbox = mailBox.ToString(),
+                            Notes = notes.ToString()
                         },
                         PaymentData = new PaymentData()
                         {
