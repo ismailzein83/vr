@@ -567,11 +567,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     if (query.ColumnsToShow.Contains("Zone"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
-
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Codes" });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
+                    if (query.ColumnsToShow.Contains("Codes"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Codes" });
+                    if (query.ColumnsToShow.Contains("Code Group"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
+                    if (query.ColumnsToShow.Contains("Country"))
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
-
                     if (query.ColumnsToShow.Contains("Rate"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
                     if (query.ColumnsToShow.Contains("RateChange"))
@@ -586,19 +587,19 @@ namespace TOne.WhS.BusinessEntity.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                     if (query.ColumnsToShow.Contains("Rate EED"))
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
-                    if (isCustomer)
-                    {
-                        rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, DateTime.Now);
-                        foreach (var rateTypeId in rateTypeIds)
-                        {
-                            var rateType = rateTypeManager.GetRateType(rateTypeId);
-                            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
-                        }
-                        if (query.ColumnsToShow.Contains("Note"))
-                            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Note" });
-                    }
+                    if (query.ColumnsToShow.Contains("Services"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
+                    //if (isCustomer)
+                    //{
+                    //    rateTypeIds = Helper.GetRateTypeIds(query.OwnerId, DateTime.Now);
+                    //    foreach (var rateTypeId in rateTypeIds)
+                    //    {
+                    //        var rateType = rateTypeManager.GetRateType(rateTypeId);
+                    //        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = rateType.Name });
+                    //    }
+                    //    if (query.ColumnsToShow.Contains("Note"))
+                    //        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Note" });
+                    //}
 
                     sheet.Rows = new List<ExportExcelRow>();
 
@@ -607,11 +608,12 @@ namespace TOne.WhS.BusinessEntity.Business
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                         if (query.ColumnsToShow.Contains("Zone"))
                             row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
-
-                        row.Cells.Add(new ExportExcelCell { Value = record.Codes });
-                        row.Cells.Add(new ExportExcelCell { Value = record.CodeGroupsId });
-                        row.Cells.Add(new ExportExcelCell { Value = record.CountryNames });
-
+                        if (query.ColumnsToShow.Contains("Codes"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.Codes });
+                        if (query.ColumnsToShow.Contains("Code Group"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.CodeGroupsId });
+                        if (query.ColumnsToShow.Contains("Country"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.CountryNames });
                         if (query.ColumnsToShow.Contains("Rate"))
                             row.Cells.Add(new ExportExcelCell { Value = record.Rate });
                         if (query.ColumnsToShow.Contains("RateChange"))
@@ -627,21 +629,22 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (query.ColumnsToShow.Contains("Rate EED"))
                             row.Cells.Add(new ExportExcelCell { Value = record.RateEED });
 
-                        row.Cells.Add(new ExportExcelCell { Value = record.ServicesSymbol });
-                        if (isCustomer)
-                        {
-                            if (rateTypeIds != null)
-                                foreach (var rateTypeId in rateTypeIds)
-                                {
-                                    if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
-                                    {
-                                        row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
-                                    }
-                                    else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
-                                }
-                            if (query.ColumnsToShow.Contains("Note"))
-                                row.Cells.Add(new ExportExcelCell { Value = record.Note });
-                        }
+                        if (query.ColumnsToShow.Contains("Services"))
+                            row.Cells.Add(new ExportExcelCell { Value = record.ServicesSymbol });
+                        //if (isCustomer)
+                        //{
+                        //    if (rateTypeIds != null)
+                        //        foreach (var rateTypeId in rateTypeIds)
+                        //        {
+                        //            if (record.RatesByRateType != null && record.RatesByRateType.TryGetValue(rateTypeId, out var otherRateHistory))
+                        //            {
+                        //                row.Cells.Add(new ExportExcelCell { Value = otherRateHistory.ConvertedRate });
+                        //            }
+                        //            else row.Cells.Add(new ExportExcelCell { Value = string.Empty });
+                        //        }
+                        //    if (query.ColumnsToShow.Contains("Note"))
+                        //        row.Cells.Add(new ExportExcelCell { Value = record.Note });
+                        //}
                         sheet.Rows.Add(row);
                     }
                 }
