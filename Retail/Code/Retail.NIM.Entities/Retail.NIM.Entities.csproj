@@ -94,6 +94,7 @@
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutput.cs" />
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutputTechnologyItem.cs" />
     <Compile Include="TechnicalAddress\GetTechnicalAddressOutputTechnologyItemNetworkElement.cs" />
+    <Compile Include="Template\Template.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
